@@ -1,15 +1,15 @@
-import java.awt.*;
+import java.awt.*;  // awt ett bibliotek för rendering(rita saker), color kommer där iftån
 
-public class Saab95{
+public class Saab95{  // top level class
 
-    public boolean turboOn;
+    public boolean turboOn;  // acces
     public int nrDoors; // Number of doors on the car
     public double enginePower; // Engine power of the car
     public double currentSpeed; // The current speed of the car
     public Color color; // Color of the car
     public String modelName; // The car model name
-    
-    public Saab95(){
+
+    public Saab95(){ // constructor
         nrDoors = 2;
         color = Color.red;
         enginePower = 125;
@@ -17,7 +17,7 @@ public class Saab95{
         modelName = "Saab95";
         stopEngine();
     }
-    
+
     public int getNrDoors(){
         return nrDoors;
     }
@@ -52,7 +52,7 @@ public class Saab95{
     public void setTurboOff(){
 	    turboOn = false;
     }
-    
+
     public double speedFactor(){
         double turbo = 1;
         if(turboOn) turbo = 1.3;
@@ -66,7 +66,7 @@ public class Saab95{
     public void decrementSpeed(double amount){
         currentSpeed = getCurrentSpeed() - speedFactor() * amount;
     }
-    
+
     // TODO fix this method according to lab pm
     public void gas(double amount){
         incrementSpeed(amount);
