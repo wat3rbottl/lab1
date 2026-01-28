@@ -75,7 +75,7 @@ public abstract class Vehicle implements Movable {
         }
     }
 
-    protected void decrementSpeed(double amount) {
+    private void decrementSpeed(double amount) {
         currentSpeed = getCurrentSpeed() - speedFactor() * amount;
         if (currentSpeed < 0) {
             currentSpeed = 0;
