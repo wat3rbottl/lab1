@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,10 +12,12 @@ public class Volvo240Test {
     @Before
     public void setUp() {
         volvo = new Volvo240();
+        volvo.startEngine();
     }
 
     @Test
-    public void volvoStartsWithZeroSpeed() {  // testar om get current speed == 0
+    public void volvoStopEngine() {  // testar om get current speed == 0
+        volvo.stopEngine();
         assertEquals(0.0, volvo.getCurrentSpeed(), 0.0001);
     }
 
@@ -45,14 +48,49 @@ public class Volvo240Test {
     }
 
     @Test
-    public void testEnginePower(){
+    public void testEnginePower() {
         assertEquals(100, volvo.getEnginePower(), 0.000001);
     }
 
     @Test
-    public void testGetSetColor(){
+    public void testGetSetColor() {
         volvo.setColor(Color.magenta);
         assertEquals(Color.magenta, volvo.getColor());
     }
 
+
+    @Test
+    public void testGasWithWrongValue() {
+        volvo.gas(2);
+        assertEquals(0.1, volvo.getCurrentSpeed(), 0.0001);
+    }
+
+    @Test
+    public void testGasWithRightValue() {
+        double speed = volvo.getCurrentSpeed();
+        volvo.gas(1);
+        assertTrue(speed < volvo.getCurrentSpeed());
+    }
+
+    @Test
+    public void testCurrentSpeed() {
+        for (int i = 0; i < 1000; i++) {
+            volvo.gas(1);
+        }
+       assertEquals(100, volvo.getCurrentSpeed(), 0.0001);
+    }
+
+    @Test
+    public void testBrakeWithWrongValue() {
+        volvo.brake(2);
+       assertEquals(0.1, volvo.getCurrentSpeed(), 0.0001);
+
+    }
+
+    @Test
+    public void testBrakeWithRightValue() {
+        double speed = volvo.getCurrentSpeed();
+        volvo.brake(1);
+        assertTrue(speed > volvo.getCurrentSpeed());
+    }
 }

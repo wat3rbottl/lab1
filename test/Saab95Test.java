@@ -11,10 +11,12 @@ public class Saab95Test {
     @Before
     public void setUp() {
         saab = new Saab95();
+        saab.startEngine();
     }
 
     @Test
-    public void saabStartsWithZeroSpeed() {  // testar om get current speed == 0
+    public void saabStopEngine() {  // testar om get current speed == 0
+        saab.stopEngine();
         assertEquals(0.0, saab.getCurrentSpeed(), 0.0001);
     }
 
@@ -25,20 +27,20 @@ public class Saab95Test {
 
     @Test
     public void turboIsOffByDefault() {
-        assertFalse(saab.turboOn);
+        assertFalse(saab.getTurboOn());
     }
 
     @Test
     public void turboCanBeTurnedOn() {
         saab.setTurboOn();
-        assertTrue(saab.turboOn);
+        assertTrue(saab.getTurboOn());
     }
 
     @Test
     public void turboCanBeTurnedOff() {
         saab.setTurboOn();
         saab.setTurboOff();
-        assertFalse(saab.turboOn);
+        assertFalse(saab.getTurboOn());
     }
 
     @Test
@@ -78,14 +80,32 @@ public class Saab95Test {
     }
 
     @Test
-    public void testEnginePower(){
+    public void testEnginePower() {
         assertEquals(125, saab.getEnginePower(), 0.000001);
     }
 
     @Test
-    public void testGetSetColor(){
+    public void testGetSetColor() {
         saab.setColor(Color.magenta);
         assertEquals(Color.magenta, saab.getColor());
     }
 
+    @Test
+    public void testMove() {
+        saab.move();
+        assertEquals(0.1, saab.getY(), 0.0001);  // behöver skapa get y, för att y variabeln är private.
+        assertEquals(0, saab.getX(), 0.0001);
+    }
+
+    @Test
+    public void testTurnRight() {
+        saab.turnRight();
+        assertEquals(Vehicle.Direction.EAST, saab.getDirection());
+    }
+
+    @Test
+    public void testTurnLeft() {
+        saab.turnLeft();
+        assertEquals(Vehicle.Direction.WEST, saab.getDirection());
+    }
 }
