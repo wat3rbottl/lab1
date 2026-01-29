@@ -3,7 +3,7 @@ import java.awt.*;
 
 public abstract class Vehicle implements Movable {
     private int nrDoors; // Number of doors on the car
-    protected double enginePower; // Engine power of the car
+    protected double enginePower; // Engine power of the car, protected because subclasses need to access it
     private Color color; // Color of the car
     private String modelName; // The car model name
     private double currentSpeed; // The current speed of the car////

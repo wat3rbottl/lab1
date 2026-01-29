@@ -6,7 +6,7 @@ import java.awt.*;
 import static org.junit.Assert.*;
 
 public class Saab95Test {
-    private Saab95 saab;   // open closed principle, om den kan vara private och allt funkar, make it private girl!
+    private Saab95 saab;  
 
     @Before
     public void setUp() {
@@ -93,7 +93,7 @@ public class Saab95Test {
     @Test
     public void testMove() {
         saab.move();
-        assertEquals(0.1, saab.getY(), 0.0001);  // behöver skapa get y, för att y variabeln är private.
+        assertEquals(0.1, saab.getY(), 0.0001);
         assertEquals(0, saab.getX(), 0.0001);
     }
 

@@ -1,6 +1,6 @@
-import java.awt.*;  // awt ett bibliotek för rendering(rita saker), color kommer där iftån
+import java.awt.*;
 
-public class Saab95 extends Vehicle {  // top level class
+public class Saab95 extends Vehicle {
     private boolean turboOn;
 
     public Saab95() {
