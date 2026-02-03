@@ -1,4 +1,4 @@
-public class CarRepair implements loadable {
+public class CarRepair implements Loadable {
 
     private int maxCars;
     private String typeOfShop;

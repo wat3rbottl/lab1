@@ -39,6 +39,11 @@ public abstract class Vehicle implements Movable {
         return y;
     }
 
+    protected void setPosition(double x, double y){
+        this.x = x;
+        this.y = y;
+    }
+
     public int getNrDoors() {
         return nrDoors;
     }
@@ -50,6 +55,8 @@ public abstract class Vehicle implements Movable {
     public double getCurrentSpeed() {
         return currentSpeed;
     }
+
+    public void setCurrentSpeed(double x){currentSpeed = x;}
 
     public Color getColor() {
         return color;
