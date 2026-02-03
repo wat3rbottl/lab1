@@ -1,0 +1,56 @@
+import java.awt.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.List;
+
+public abstract class CarFerry implements Transporter<Car> {
+    private final int capacityPerLane;
+    private final int numLanes;
+    private final List<Queue<Car>> lanes;
+
+    private double x = 0; // The ferry's initial x coordinate
+    private double y = 0; // The ferry's initial y coordinate
+
+    public CarFerry(int maxLoad, int numLanes){
+        capacityPerLane = maxLoad;
+        this.numLanes = numLanes;
+        lanes = new ArrayList<>();
+
+        for(int i=0; i < numLanes; i++){
+            lanes.add(new ArrayDeque<>());
+        }
+    }
+
+    public int getNumCars(){
+        return cars.size();
+    }
+
+    @Override
+    public void load(Car car){
+        for(Queue<Car> lane : lanes){
+            if(lane.size() < capacityPerLane){
+                lane.add(car);
+                car.setPosition(this.x, this.y);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public Car unload(){
+        return unload(0);
+    }
+
+    public Car unload(int laneIndex){
+        if(laneIndex < 0 || laneIndex >= lanes.size()){
+            return null;
+        }
+        else {
+            Car car = lanes.get(laneIndex).poll();
+            car.setPosition(this.x + 5, this.y +5);
+            return car;
+        }
+    }
+
+}

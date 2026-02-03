@@ -1,6 +1,7 @@
 import java.awt.*;
+import java.util.ArrayList;
 
-public abstract class Truck extends Vehicle implements Loader {
+public abstract class Truck<T extends Transportable> extends Vehicle implements Transporter<T> {
     private boolean rampUp;
 
     public Truck(int doors, double EnginePower, Color dye, String name) {
@@ -11,10 +12,10 @@ public abstract class Truck extends Vehicle implements Loader {
     public void raise(){
         rampUp = true;} // Raises the ramp, not loadable
 
-    public void lower(){if(getCurrentSpeed() == 0)
-    {rampUp = false;}
+    public void lower(){
+        if(getCurrentSpeed() == 0)
+        {rampUp = false;}
     } // Lowers the ramp, loadable
-
 
     public boolean canLoad() {
         return !rampUp;} // Can't load if ramp is up, can if lowered
