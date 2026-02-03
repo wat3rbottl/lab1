@@ -20,10 +20,23 @@ public abstract class Truck<T extends Transportable> extends Vehicle implements 
     public boolean canLoad() {
         return !rampUp;} // Can't load if ramp is up, can if lowered
 
+
     @Override
     public void startEngine(){
                 if (rampUp) {setCurrentSpeed(0.1);}
         }
+
+    @Override
+    public abstract void load(T item);
+
+    @Override
+    public abstract T unload();
+
+
+
+
+
+
 
 
 }

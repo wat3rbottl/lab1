@@ -4,13 +4,28 @@ import java.util.Objects;
 import java.util.Stack;
 
 
-public abstract class VolkswagenUnicorn extends Truck implements Loader<Car> {
-    private final Stack<String> cars = new Stack<String>(); //Stores cars loaded in order LIFO
-    public VolkswagenUnicorn() {super(2,  500, Color.pink, "Volkswagen Unicorn");}
+public class VolkswagenUnicorn extends Truck<Car>  {
+    private final Stack<Car> cars = new Stack<Car>(); //Stores cars loaded in order LIFO
+    private final int capacity = 20;
+
+    public VolkswagenUnicorn() {
+        super(2, 500, Color.pink, "Volkswagen Unicorn");
+    }
+
+    public int getCarsSize() {
+        return cars.size();
+    }
 
     @Override
-    public void load(Car carname){if (canLoad()&& carname.getX() == getX()){cars.push("carname");
-        carname.setPosition(getX(), getY());}
+    public double speedFactor() {
+        return enginePower * 0.05;}
+
+    @Override
+    public void load(Car carname) {
+        if (canLoad() && isNear(carname) && cars.size() < capacity) {
+            cars.push(carname);
+            carname.setPosition(getX(), getY());
+        }
     }
 
     public boolean isNear(Car carName){
@@ -19,9 +34,10 @@ public abstract class VolkswagenUnicorn extends Truck implements Loader<Car> {
 
     @Override
     public Car unload() {
-        if (canLoad() && Objects.equals(cars.lastElement(), carname)) {
-            cars.pop();
-            carname.setPosition(getX() - 5, getY() - 5);
+        if (canLoad() && !cars.isEmpty()) {
+            Car car = cars.pop();
+            car.setPosition(getX() - 5, getY() - 5);
+            return car;
         }
         else return null;
     }
