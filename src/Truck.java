@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public abstract class Truck extends Vehicle implements Loadable{
+public abstract class Truck extends Vehicle implements Loader {
     private boolean rampUp;
 
     public Truck(int doors, double EnginePower, Color dye, String name) {
@@ -24,8 +24,5 @@ public abstract class Truck extends Vehicle implements Loadable{
                 if (rampUp) {setCurrentSpeed(0.1);}
         }
 
-    @Override
-    public  void unload(Car carname);
 
-    
 }
