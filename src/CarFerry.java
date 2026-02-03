@@ -22,10 +22,6 @@ public abstract class CarFerry implements Transporter<Car> {
         }
     }
 
-    public int getNumCars(){
-        return cars.size();
-    }
-
     @Override
     public void load(Car car){
         for(Queue<Car> lane : lanes){
