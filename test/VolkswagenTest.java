@@ -1,6 +1,5 @@
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import static org.junit.Assert.*;
 
 
@@ -24,26 +23,39 @@ public class VolkswagenTest {
 
     @Test
     public void testLoad() {
-    volkswagenunicorn.load(car2);
-    assertEquals(0, car2.getX(), 0.00001);
-    assertEquals(0, car2.getY(), 0.00001);
-    assertEquals(1, volkswagenunicorn.getCarsSize());
+        volkswagenunicorn.lower();
+        volkswagenunicorn.load(car2);
+        assertEquals(0, car2.getX(), 0.00001);
+        assertEquals(0, car2.getY(), 0.00001);
+        assertEquals(1, volkswagenunicorn.getAmountOfCars(), 0.0001);
     }
 
+    @Test
     public void testUnload(){
+        volkswagenunicorn.lower();
         volkswagenunicorn.load(car2);
         volkswagenunicorn.unload();
         assertEquals(volkswagenunicorn.getX()-5, car2.getX(), 0.0001);
         assertEquals( volkswagenunicorn.getY()-5,car2.getY(), 0.0001);
-        assertEquals(0, volkswagenunicorn.getCarsSize());
+        assertEquals(0, volkswagenunicorn.getAmountOfCars());
     }
 
-
+    @Test
     public void testMove(){
+        volkswagenunicorn.lower();
         volkswagenunicorn.load(car2);
+        volkswagenunicorn.raise();
         volkswagenunicorn.startEngine();
         volkswagenunicorn.move();
-        
-
+        assertEquals(volkswagenunicorn.getY(), car2.getY(), 0.0001);
+        assertEquals(volkswagenunicorn.getX(), car2.getX(), 0.0001);
     }
+
+    @Test
+    public void testLoadWithFarAwayCar(){
+        volkswagenunicorn.load(car1);
+        assertEquals(0, volkswagenunicorn.getAmountOfCars(), 0.001);
+    }
+
+
 }

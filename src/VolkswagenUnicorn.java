@@ -12,7 +12,7 @@ public class VolkswagenUnicorn extends Truck<Car>  {
         super(2, 500, Color.pink, "Volkswagen Unicorn");
     }
 
-    public int getCarsSize() {
+    public int getAmountOfCars() {
         return cars.size();
     }
 
@@ -28,8 +28,8 @@ public class VolkswagenUnicorn extends Truck<Car>  {
         }
     }
 
-    public boolean isNear(Car carName){
-        return Math.abs(carName.getX() - getX()) <= 5 && Math.abs(carName.getY() - getY()) <= 1;
+    private boolean isNear(Car carName){
+        return Math.abs(carName.getX() - getX()) <= 5 && Math.abs(carName.getY() - getY()) <= 5;
     }
 
     @Override
