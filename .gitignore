@@ -13,4 +13,9 @@
 
 /lab1.iml/
 /.idea/workspace.xml
+# IntelliJ
+.idea/
+*.iml
 
+# Build output
+out/
