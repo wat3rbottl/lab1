@@ -8,4 +8,9 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
-/out/
+/.out/production/
+/.out/test/
+
+/lab1.iml/
+/.idea/workspace.xml
+

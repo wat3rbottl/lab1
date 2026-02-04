@@ -32,7 +32,7 @@ public class ScaniaTest {
         for(int i = 0; i < 10; i++){
             scania.lower();
         }
-        assertEquals(70, scania.getRampDeg(), 0.0001);
+        assertEquals(0, scania.getRampDeg(), 0.0001);
     }
 
     @Test

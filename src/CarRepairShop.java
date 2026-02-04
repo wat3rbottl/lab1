@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 import java.awt.*;
 
-public class CarRepairShop implements Transporter<Car>{
+public class CarRepairShop<T extends Car> implements Transporter<T>{
     private final int capacity;
-    private ArrayList<Car> cars = new ArrayList<>();
+    private ArrayList<T> cars = new ArrayList<>();
 
     public CarRepairShop(int maxCars){
         capacity = maxCars;
@@ -18,14 +18,14 @@ public class CarRepairShop implements Transporter<Car>{
     }
 
     @Override
-    public void load(Car car){
+    public void load(T car){
         if(cars.size() < capacity){
             cars.add(car);
         }
     }
 
     @Override
-    public Car unload(){
+    public T unload(){
         if(cars.isEmpty()){
             return null;
         }

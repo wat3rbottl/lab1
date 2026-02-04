@@ -10,7 +10,6 @@ public abstract class Vehicle implements Movable {
     private double x; // The cars initial x coordinate
     private double y; // The cars initial y coordinate
     private Direction direction; // Direction of the car
-    private double weight; //The cars i
 
     public Vehicle(int doors, double EnginePower, Color dye, String name) {
         stopEngine();

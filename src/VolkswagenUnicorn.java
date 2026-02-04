@@ -21,10 +21,10 @@ public class VolkswagenUnicorn extends Truck<Car>  {
         return enginePower * 0.05;}
 
     @Override
-    public void load(Car carname) {
-        if (canLoad() && isNear(carname) && cars.size() < capacity) {
-            cars.push(carname);
-            carname.setPosition(getX(), getY());
+    public void load(Car carName) {
+        if (canLoad() && isNear(carName) && cars.size() < capacity) {
+            carName.setPosition(getX(), getY());
+            cars.push(carName);
         }
     }
 

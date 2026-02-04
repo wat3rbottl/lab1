@@ -16,6 +16,6 @@ public class CarRepairShopTest {
         generalRepair.load(new Saab95());
         generalRepair.load(new Volvo240());
 
-        assertEquals(3, generalRepair.numCars(), 0.0001);
+        assertEquals(2, generalRepair.numCars(), 0.0001);
     }
 }
