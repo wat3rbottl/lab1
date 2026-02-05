@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Scania<T extends Transportable> extends Truck<T>{
+public class Scania<T extends Transportable> extends RampVehicle<T> {
     private int rampDeg = 0;
     private ArrayList<T> items = new ArrayList<>();
 

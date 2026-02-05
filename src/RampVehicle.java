@@ -1,10 +1,9 @@
 import java.awt.*;
-import java.util.ArrayList;
 
-public abstract class Truck<T extends Transportable> extends Vehicle implements Transporter<T> {
+public abstract class RampVehicle<T extends Transportable> extends Vehicle implements Transporter<T> {
     private boolean rampUp;
 
-    public Truck(int doors, double EnginePower, Color dye, String name) {
+    public RampVehicle(int doors, double EnginePower, Color dye, String name) {
         super(doors, EnginePower, dye, name);
         rampUp = true;
     }

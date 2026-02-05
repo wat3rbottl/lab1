@@ -1,10 +1,9 @@
 
 import java.awt.*;
-import java.util.Objects;
 import java.util.Stack;
 
 
-public class VolkswagenUnicorn extends Truck<Car>  {
+public class VolkswagenUnicorn extends RampVehicle<Car> {
     private final Stack<Car> cars = new Stack<Car>(); //Stores cars loaded in order LIFO
     private final int capacity = 20;
 
