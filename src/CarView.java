@@ -4,6 +4,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 /**
  * This class represents the full view of the MVC pattern of your car simulator.
@@ -16,7 +17,6 @@ import java.awt.event.ActionListener;
 public class CarView extends JFrame{
     private static final int X = 800;
     private static final int Y = 800;
-    public static final Color Purple = new Color(102 - 0 - 153);
 
     // The controller member
     CarController carC;
@@ -39,7 +39,7 @@ public class CarView extends JFrame{
     JButton brakeButton = new JButton("Brake");
     JButton turboOnButton = new JButton("Saab Turbo on");
     JButton turboOffButton = new JButton("Saab Turbo off");
-    JButton liftBedButton = new JButton("Scania Lift Bed");
+    JButton liftBedButton = new JButton("Turn Right");
     JButton lowerBedButton = new JButton("Lower Lift Bed");
 
     JButton startButton = new JButton("Start all cars");
@@ -72,8 +72,10 @@ public class CarView extends JFrame{
         gasSpinner.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 gasAmount = (int) ((JSpinner)e.getSource()).getValue();
+                brakeAmount = (int) ((JSpinner)e.getSource()).getValue();
             }
         });
+
 
         gasPanel.setLayout(new BorderLayout());
         gasPanel.add(gasLabel, BorderLayout.PAGE_START);
@@ -91,7 +93,7 @@ public class CarView extends JFrame{
         controlPanel.add(lowerBedButton, 5);
         controlPanel.setPreferredSize(new Dimension((X/2)+4, 200));
         this.add(controlPanel);
-        controlPanel.setBackground(Purple);
+        controlPanel.setBackground(Color.pink);
 
 
         startButton.setBackground(Color.blue);
@@ -128,6 +130,20 @@ public class CarView extends JFrame{
                 carC.startEngine(); }
         });
 
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                carC.stopEngine();
+            }
+        });
+
+        liftBedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                carC.turnRight();
+            }
+        });
+
         // Make the frame pack all it's components by respecting the sizes if possible.
         this.pack();
 
@@ -139,5 +155,7 @@ public class CarView extends JFrame{
         this.setVisible(true);
         // Make sure the frame exits when "x" is pressed
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
     }
 }

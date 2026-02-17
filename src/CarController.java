@@ -3,6 +3,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import static java.lang.Math.abs;
+
+
 /*
  * This class represents the Controller part in the MVC pattern.
  * It's responsibilities is to listen to the View and responds in a appropriate manner by
@@ -30,7 +33,7 @@ public class CarController {
         CarController cc = new CarController();
 
         Volvo240 bettan = new Volvo240();
-         //cc.cars.add(bettan);
+        cc.cars.add(bettan);
 
         // Start a new view and send a reference of self
         cc.frame = new CarView("CarSim 1.0", cc);
@@ -45,14 +48,47 @@ public class CarController {
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             for (Car car : cars) {
-                car.move();
                 int x = (int) Math.round(car.getX());
                 int y = (int) Math.round(car.getY());
-                frame.drawPanel.moveit(x, y);
-                // repaint() calls the paintComponent method of the panel
-                frame.drawPanel.repaint();
+
+                if(abs(x) < 700 && abs(y) < 460) {
+                    car.move();
+                    frame.drawPanel.moveit(x, y);
+                    // repaint() calls the paintComponent method of the panel
+                    frame.drawPanel.repaint();
+                }
+
+                else if(abs(x) >= 700 && abs(y) < 460) {
+                    if(car.getDirection() == Vehicle.Direction.EAST){
+                        car.setDirection(Vehicle.Direction.WEST);
+                        car.move();
+                        frame.drawPanel.moveit(x, y);
+                        frame.drawPanel.repaint();
+                    }
+                    else{
+                        car.setDirection(Vehicle.Direction.EAST);
+                        car.move();
+                        frame.drawPanel.moveit(x, y);
+                        frame.drawPanel.repaint();
+                    }
+                }
+
+                else if(abs(x) < 700 && abs(y) >= 460) {
+                    if(car.getDirection() == Vehicle.Direction.NORTH) {
+                        car.setDirection(Vehicle.Direction.SOUTH);
+                        car.move();
+                        frame.drawPanel.moveit(x, y);
+                        frame.drawPanel.repaint();
+                    } else {
+                        car.setDirection(Vehicle.Direction.NORTH);
+                        car.move();
+                        frame.drawPanel.moveit(x, y);
+                        frame.drawPanel.repaint();
+                    }
+                }
             }
         }
+
     }
 
     // Calls the gas method for each car once
@@ -77,4 +113,17 @@ public class CarController {
             car.startEngine();
         }
     }
+
+    void stopEngine(){
+        for (Car car : cars){
+            car.stopEngine();
+        }
+    }
+
+    void turnRight(){
+        for (Car car : cars){
+            car.turnRight();
+        }
+    }
+
 }

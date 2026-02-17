@@ -20,7 +20,7 @@ public class DrawPanel extends JPanel{
     Point volvoWorkshopPoint = new Point(300,300);
 
     // TODO: Make this general for all cars
-    void moveit(int x, int y){
+    void moveit(int x, int  y){
 
         volvoPoint.x = x;
         volvoPoint.y = y;
@@ -53,7 +53,8 @@ public class DrawPanel extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(volvoImage, volvoPoint.x, volvoPoint.y, null); // see javadoc for more info on the parameters
+        g.drawImage(volvoImage, volvoPoint.x, volvoPoint.y, null);// see javadoc for more info on the parameters
         g.drawImage(volvoWorkshopImage, volvoWorkshopPoint.x, volvoWorkshopPoint.y, null);
+
     }
 }
