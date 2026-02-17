@@ -4,10 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 public class CarRepairShopTest {
     private CarRepairShop<Car> generalRepair;
+    private CarRepairShop<Volvo240> VolvoRepair;
 
     @Before
     public void setUp() throws Exception {
         generalRepair = new CarRepairShop<>(2);
+        VolvoRepair = new CarRepairShop<>(2);
     }
 
     @Test

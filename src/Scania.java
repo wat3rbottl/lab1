@@ -25,7 +25,7 @@ public class Scania<T extends Transportable> extends RampVehicle<T> {
 
     @Override
     public double speedFactor(){
-        return enginePower * 0.03;
+        return getEnginePower() * 0.03;
     }
 
     @Override

@@ -17,7 +17,7 @@ public class VolkswagenUnicorn extends RampVehicle<Car> {
 
     @Override
     public double speedFactor() {
-        return enginePower * 0.05;}
+        return getEnginePower() * 0.05;}
 
     @Override
     public void load(Car carName) {
