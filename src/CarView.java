@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 public class CarView extends JFrame{
     private static final int X = 800;
     private static final int Y = 800;
+    public static final Color Purple = new Color(102 - 0 - 153);
 
     // The controller member
     CarController carC;
@@ -24,10 +25,15 @@ public class CarView extends JFrame{
 
     JPanel controlPanel = new JPanel();
 
+    //Gas wiring
     JPanel gasPanel = new JPanel();
     JSpinner gasSpinner = new JSpinner();
     int gasAmount = 0;
     JLabel gasLabel = new JLabel("Amount of gas");
+
+    //Brake wiring
+    JPanel brakePanel = new JPanel();
+    int brakeAmount = 0;
 
     JButton gasButton = new JButton("Gas");
     JButton brakeButton = new JButton("Brake");
@@ -41,7 +47,7 @@ public class CarView extends JFrame{
 
     // Constructor
     public CarView(String framename, CarController cc){
-        this.carC = cc;
+        this.carC= cc;
         initComponents(framename);
     }
 
@@ -85,17 +91,17 @@ public class CarView extends JFrame{
         controlPanel.add(lowerBedButton, 5);
         controlPanel.setPreferredSize(new Dimension((X/2)+4, 200));
         this.add(controlPanel);
-        controlPanel.setBackground(Color.CYAN);
+        controlPanel.setBackground(Purple);
 
 
         startButton.setBackground(Color.blue);
-        startButton.setForeground(Color.green);
+        startButton.setForeground(Color.pink);
         startButton.setPreferredSize(new Dimension(X/5-15,200));
         this.add(startButton);
 
 
-        stopButton.setBackground(Color.red);
-        stopButton.setForeground(Color.black);
+        stopButton.setBackground(Color.WHITE);
+        stopButton.setForeground(Color.pink);
         stopButton.setPreferredSize(new Dimension(X/5-15,200));
         this.add(stopButton);
 
@@ -106,6 +112,20 @@ public class CarView extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 carC.gas(gasAmount);
             }
+        });
+        //ActionListener for brake
+        brakeButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                carC.brake(brakeAmount);
+            }
+        });
+
+        //ActionListener for start engine
+        startButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                carC.startEngine(); }
         });
 
         // Make the frame pack all it's components by respecting the sizes if possible.

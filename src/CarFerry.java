@@ -25,7 +25,7 @@ public abstract class CarFerry extends RampVehicle<Car>  {
         for(Queue<Car> lane : lanes){
             if(lane.size() < capacityPerLane){
                 lane.add(car);
-                car.setPosition(this.x, this.y);
+                car.setPosition(this.getX(), this.getY());
                 break;
             }
         }
@@ -42,7 +42,7 @@ public abstract class CarFerry extends RampVehicle<Car>  {
         }
         else {
             Car car = lanes.get(laneIndex).poll();
-            car.setPosition(this.x + 5, this.y +5);
+            car.setPosition(this.getX() + 5, this.getY() +5);
             return car;
         }
     }

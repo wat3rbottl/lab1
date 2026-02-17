@@ -4,9 +4,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /*
-* This class represents the Controller part in the MVC pattern.
-* It's responsibilities is to listen to the View and responds in a appropriate manner by
-* modifying the model state and the updating the view.
+ * This class represents the Controller part in the MVC pattern.
+ * It's responsibilities is to listen to the View and responds in a appropriate manner by
+ * modifying the model state and the updating the view.
  */
 
 public class CarController {
@@ -29,7 +29,8 @@ public class CarController {
         // Instance of this class
         CarController cc = new CarController();
 
-        // cc.cars.add(new Volvo240());
+        Volvo240 bettan = new Volvo240();
+         //cc.cars.add(bettan);
 
         // Start a new view and send a reference of self
         cc.frame = new CarView("CarSim 1.0", cc);
@@ -39,11 +40,11 @@ public class CarController {
     }
 
     /* Each step the TimerListener moves all the cars in the list and tells the
-    * view to update its images. Change this method to your needs.
-    * */
+     * view to update its images. Change this method to your needs.
+     * */
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-       for (Car car : cars) {
+            for (Car car : cars) {
                 car.move();
                 int x = (int) Math.round(car.getX());
                 int y = (int) Math.round(car.getY());
@@ -58,8 +59,22 @@ public class CarController {
     void gas(int amount) {
         double gas = ((double) amount) / 100;
         for (Car car : cars
-                ) {
+        ) {
             car.gas(gas);
+        }
+    }
+
+    void brake(int amount) {
+        double brake = ((double) amount) / 100;
+        for (Car car : cars){
+            car.brake(brake);
+
+        }
+    }
+
+    void startEngine(){
+        for (Car car : cars){
+            car.startEngine();
         }
     }
 }
