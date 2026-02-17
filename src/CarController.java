@@ -61,30 +61,24 @@ public class CarController {
                 else if(abs(x) >= 700 && abs(y) < 460) {
                     if(car.getDirection() == Vehicle.Direction.EAST){
                         car.setDirection(Vehicle.Direction.WEST);
-                        car.move();
-                        frame.drawPanel.moveit(x, y);
-                        frame.drawPanel.repaint();
                     }
                     else{
                         car.setDirection(Vehicle.Direction.EAST);
-                        car.move();
-                        frame.drawPanel.moveit(x, y);
-                        frame.drawPanel.repaint();
                     }
+                    car.move();
+                    frame.drawPanel.moveit(x, y);
+                    frame.drawPanel.repaint();
                 }
 
                 else if(abs(x) < 700 && abs(y) >= 460) {
                     if(car.getDirection() == Vehicle.Direction.NORTH) {
                         car.setDirection(Vehicle.Direction.SOUTH);
-                        car.move();
-                        frame.drawPanel.moveit(x, y);
-                        frame.drawPanel.repaint();
                     } else {
                         car.setDirection(Vehicle.Direction.NORTH);
-                        car.move();
-                        frame.drawPanel.moveit(x, y);
-                        frame.drawPanel.repaint();
                     }
+                    car.move();
+                    frame.drawPanel.moveit(x, y);
+                    frame.drawPanel.repaint();
                 }
             }
         }
