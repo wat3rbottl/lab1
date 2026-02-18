@@ -7,7 +7,7 @@ import javax.swing.*;
 
 // This panel represents the animated part of the view with the car images.
 
-public class DrawPanel extends JPanel{
+public class DrawPanel extends JPanel {
 
     // Images of the cars
     BufferedImage volvoImage;
@@ -15,25 +15,37 @@ public class DrawPanel extends JPanel{
     BufferedImage scaniaImage;
 
     // To keep track of the cars positions
-    Point volvoPoint = new Point();
-    Point saabPoint = new Point(200, 200);
-    Point scaniaPoint = new Point(100,100);
+    Point volvoPoint = new Point(0, 100);
+    Point saabPoint = new Point(0, 200);
+    Point scaniaPoint = new Point();
 
     // Keeps track if image should be flipped
     protected static boolean flipped = false;
+    protected static boolean volvoFlipped = false;
+    protected static boolean saabFlipped = false;
+    protected static boolean scaniaFlipped = false;
 
     BufferedImage volvoWorkshopImage;
-    Point volvoWorkshopPoint = new Point(300,300);
+    Point volvoWorkshopPoint = new Point(300, 300);
 
     // TODO: Make this general for all cars
-    void moveit(int x, int  y, Vehicle vehicle){
-
-        if (Volvo240) {
+    // Ny moveit: uppdaterar rätt bil + (valfritt) flipped
+    void moveit(Vehicle v, int x, int y, boolean flipped) {
+        if (v instanceof Volvo240) {
             volvoPoint.x = x;
             volvoPoint.y = y;
-
-
+            volvoFlipped = flipped;
+        } else if (v instanceof Saab95) {
+            saabPoint.x = x;
+            saabPoint.y = y;
+            saabFlipped = flipped;
+        } else { // Scania eller annan Vehicle
+            scaniaPoint.x = x;
+            scaniaPoint.y = y;
+            scaniaFlipped = flipped;
+        }
     }
+
 
     // Initializes the panel and reads the images
     public DrawPanel(int x, int y) {
@@ -47,13 +59,12 @@ public class DrawPanel extends JPanel{
             saabImage = ImageIO.read(DrawPanel.class.getResourceAsStream("/pics/Saab95.jpg"));
             scaniaImage = ImageIO.read(DrawPanel.class.getResourceAsStream("/pics/Scania.jpg"));
 
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
 
         // Makes program accept keyboard commands
-    setupKeyBindings();
+        setupKeyBindings();
     }
 
     // This method is called each time the panel updates/refreshes/repaints itself
@@ -67,59 +78,66 @@ public class DrawPanel extends JPanel{
         g.drawImage(saabImage, saabPoint.x, saabPoint.y, null);
         g.drawImage(scaniaImage, scaniaPoint.x, scaniaPoint.y, null);
 
-        if (flipped){g.drawImage(volvoImage, volvoPoint.x + volvoImage.getWidth(), volvoPoint.y, -volvoImage.getWidth(), volvoImage.getHeight(), null);}
-
-        else{g.drawImage(volvoImage, volvoPoint.x, volvoPoint.y, null);}// see javadoc for more info on the parameters
-
-
+        if (volvoFlipped) {
+            g.drawImage(volvoImage, volvoPoint.x + volvoImage.getWidth(), volvoPoint.y, -volvoImage.getWidth(), volvoImage.getHeight(), null);
+        } else {
+            g.drawImage(volvoImage, volvoPoint.x, volvoPoint.y, null);
+        }// see javadoc for more info on the parameters
+        if (saabFlipped) {
+            g.drawImage(saabImage, saabPoint.x + saabImage.getWidth(), saabPoint.y, - saabImage.getWidth(), saabImage.getHeight(), null);
+        } else {
+            g.drawImage(saabImage, saabPoint.x, saabPoint.y, null);
+        }
+        if (scaniaFlipped)
+        { g.drawImage(scaniaImage, scaniaPoint.x + scaniaImage.getWidth(), scaniaPoint.y, - scaniaImage.getWidth(), scaniaImage.getHeight(), null);}
+        else {
+            g.drawImage(scaniaImage, scaniaPoint.x, scaniaPoint.y, null);
+        }
     }
+        /// ////Keyboard setup:///////
+        // Sets arrow keys to move the car in different directions
+        private void setupKeyBindings() {
+            InputMap im = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+            ActionMap am = getActionMap();
 
-    /// ////Keyboard setup:///////
-    // Sets arrow keys to move the car in different directions
-    private void setupKeyBindings(){
-        InputMap im = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap am = getActionMap();
+            im.put(KeyStroke.getKeyStroke("LEFT"), "left");
+            im.put(KeyStroke.getKeyStroke("RIGHT"), "right");
+            im.put(KeyStroke.getKeyStroke("UP"), "up");
+            im.put(KeyStroke.getKeyStroke("DOWN"), "down");
 
-        im.put(KeyStroke.getKeyStroke("LEFT"),"left");
-        im.put(KeyStroke.getKeyStroke("RIGHT"), "right");
-        im.put(KeyStroke.getKeyStroke("UP"), "up");
-        im.put(KeyStroke.getKeyStroke("DOWN"), "down");
+            am.put("left", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CarController.turnLeft();
+                    repaint();
+                }
+            });
 
-        am.put("left", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CarController.turnLeft();
-                repaint();
+            am.put("right", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CarController.turnRight();
+                    repaint();
 
-            }
-        });
+                }
 
-        am.put("right", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CarController.turnRight();
-                repaint();
+            });
 
-            }
+            am.put("up", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CarController.up();
+                    repaint();
 
-        });
+                }
+            });
 
-        am.put("up", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CarController.up();
-                repaint();
-
-            }
-        });
-
-        am.put("down", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CarController.down();
-                repaint();
-            }
-        });
-    }
-
+            am.put("down", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CarController.down();
+                    repaint();
+                }
+            });
+        }
 }

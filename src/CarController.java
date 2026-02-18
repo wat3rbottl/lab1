@@ -33,9 +33,13 @@ public class CarController {
         // Instance of this class
         CarController cc = new CarController();
 
-        cc.vehicles.add(new Volvo240());
-        cc.vehicles.add(new Saab95());
-        cc.vehicles.add(new Scania<>());
+        Volvo240 volvo = new Volvo240();
+        volvo.setPosition(0, 100);
+        vehicles.add(volvo);
+        Saab95 saab = new Saab95();
+        saab.setPosition(0, 200);
+        vehicles.add(saab);
+        vehicles.add(new Scania<>());
 
         // Start a new view and send a reference of self
         cc.frame = new CarView("CarSim 1.0", cc);
@@ -50,49 +54,35 @@ public class CarController {
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             for (Vehicle vehicle : vehicles) {
+
                 int x = (int) Math.round(vehicle.getX());
                 int y = (int) Math.round(vehicle.getY());
 
-                if(abs(x) < 700 && abs(y) < 460) {
-                    vehicle.move();
-                    frame.drawPanel.moveit(x, y);
-                    // repaint() calls the paintComponent method of the panel
-                    frame.drawPanel.repaint();
-                }
-
-                else if(abs(x) >= 700 && abs(y) < 460) {
-                    if(vehicle.getDirection() == Vehicle.Direction.EAST){
+                if (x >= 700 || x < 1) {
+                    if (vehicle.getDirection() == Vehicle.Direction.EAST) {
                         vehicle.setDirection(Vehicle.Direction.WEST);
-                        vehicle.move();
-                        frame.drawPanel.moveit(x, y, vehicle);
-                        DrawPanel.flipped = true;
-                        frame.drawPanel.repaint();
-                    }
-                    else{
+                    } else {
                         vehicle.setDirection(Vehicle.Direction.EAST);
-                        vehicle.move();
-                        frame.drawPanel.moveit(x, y);
-                        frame.drawPanel.repaint();
                     }
-                }
-
-                else if(abs(x) < 700 && abs(y) >= 460) {
-                    if(vehicle.getDirection() == Vehicle.Direction.NORTH) {
+                } else if (y >= 460 || y < 1) {
+                    if (vehicle.getDirection() == Vehicle.Direction.NORTH) {
                         vehicle.setDirection(Vehicle.Direction.SOUTH);
-                        vehicle.move();
-                        frame.drawPanel.moveit(x, y);
-                        DrawPanel.flipped = true;
-                        frame.drawPanel.repaint();
                     } else {
                         vehicle.setDirection(Vehicle.Direction.NORTH);
-                        vehicle.move();
-                        frame.drawPanel.moveit(x, y);
-                        frame.drawPanel.repaint();
                     }
                 }
-            }
-        }
 
+                vehicle.move();
+
+                int newX = (int) Math.round(vehicle.getX());
+                int newY = (int) Math.round(vehicle.getY());
+
+                boolean flipped = (vehicle.getDirection() == Vehicle.Direction.WEST);
+
+                frame.drawPanel.moveit(vehicle, newX, newY, flipped);
+            }
+            frame.drawPanel.repaint();
+        }
     }
 
     // Calls the gas method for each car once
@@ -106,45 +96,62 @@ public class CarController {
 
     void brake(int amount) {
         double brake = ((double) amount) / 100;
-        for (Vehicle vehicle : vehicles){
+        for (Vehicle vehicle : vehicles) {
             vehicle.brake(brake);
 
         }
     }
 
-    void startEngine(){
-        for (Vehicle vehicle : vehicles){
+    void startEngine() {
+        for (Vehicle vehicle : vehicles) {
             vehicle.startEngine();
         }
     }
 
-    void stopEngine(){
-        for (Vehicle vehicle : vehicles){
+    void stopEngine() {
+        for (Vehicle vehicle : vehicles) {
             vehicle.stopEngine();
         }
     }
 
-     static void turnRight(){
-        for (Vehicle vehicle : vehicles){
+    void turnRight() {
+        for (Vehicle vehicle : vehicles) {
             vehicle.turnRight();
         }
     }
-    static void turnLeft(){
-        for (Vehicle vehicle : vehicles){
+
+    static void turnLeft() {
+        for (Vehicle vehicle : vehicles) {
             vehicle.turnLeft();
         }
     }
 
-    static void up(){
-        for (Vehicle vehicle : vehicles){
+    static void up() {
+        for (Vehicle vehicle : vehicles) {
             vehicle.up();
         }
     }
-    static void down(){
-        for(Vehicle vehicle : vehicles){
+
+    static void down() {
+        for (Vehicle vehicle : vehicles) {
             vehicle.down();
         }
     }
 
+    void turboOn() {
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle instanceof Saab95 saab) {
+                saab.setTurboOn();
+            }
+        }
+    }
 
+    void turboOff(){
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle instanceof Saab95 saab) {
+                saab.setTurboOff();
+            }
+        }
+    }
 }
+
