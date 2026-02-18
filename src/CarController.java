@@ -25,7 +25,7 @@ public class CarController {
     // The frame that represents this instance View of the MVC pattern
     CarView frame;
     // A list of cars, modify if needed
-    static ArrayList<Car> cars = new ArrayList<>();
+    static ArrayList<Vehicle> vehicles = new ArrayList<>();
 
     //methods:
 
@@ -33,8 +33,9 @@ public class CarController {
         // Instance of this class
         CarController cc = new CarController();
 
-        Volvo240 bettan = new Volvo240();
-        cc.cars.add(bettan);
+        cc.vehicles.add(new Volvo240());
+        cc.vehicles.add(new Saab95());
+        cc.vehicles.add(new Scania<>());
 
         // Start a new view and send a reference of self
         cc.frame = new CarView("CarSim 1.0", cc);
@@ -48,43 +49,43 @@ public class CarController {
      * */
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            for (Car car : cars) {
-                int x = (int) Math.round(car.getX());
-                int y = (int) Math.round(car.getY());
+            for (Vehicle vehicle : vehicles) {
+                int x = (int) Math.round(vehicle.getX());
+                int y = (int) Math.round(vehicle.getY());
 
                 if(abs(x) < 700 && abs(y) < 460) {
-                    car.move();
+                    vehicle.move();
                     frame.drawPanel.moveit(x, y);
                     // repaint() calls the paintComponent method of the panel
                     frame.drawPanel.repaint();
                 }
 
                 else if(abs(x) >= 700 && abs(y) < 460) {
-                    if(car.getDirection() == Vehicle.Direction.EAST){
-                        car.setDirection(Vehicle.Direction.WEST);
-                        car.move();
+                    if(vehicle.getDirection() == Vehicle.Direction.EAST){
+                        vehicle.setDirection(Vehicle.Direction.WEST);
+                        vehicle.move();
                         frame.drawPanel.moveit(x, y);
                         DrawPanel.flipped = true;
                         frame.drawPanel.repaint();
                     }
                     else{
-                        car.setDirection(Vehicle.Direction.EAST);
-                        car.move();
+                        vehicle.setDirection(Vehicle.Direction.EAST);
+                        vehicle.move();
                         frame.drawPanel.moveit(x, y);
                         frame.drawPanel.repaint();
                     }
                 }
 
                 else if(abs(x) < 700 && abs(y) >= 460) {
-                    if(car.getDirection() == Vehicle.Direction.NORTH) {
-                        car.setDirection(Vehicle.Direction.SOUTH);
-                        car.move();
+                    if(vehicle.getDirection() == Vehicle.Direction.NORTH) {
+                        vehicle.setDirection(Vehicle.Direction.SOUTH);
+                        vehicle.move();
                         frame.drawPanel.moveit(x, y);
                         DrawPanel.flipped = true;
                         frame.drawPanel.repaint();
                     } else {
-                        car.setDirection(Vehicle.Direction.NORTH);
-                        car.move();
+                        vehicle.setDirection(Vehicle.Direction.NORTH);
+                        vehicle.move();
                         frame.drawPanel.moveit(x, y);
                         frame.drawPanel.repaint();
                     }
@@ -97,51 +98,51 @@ public class CarController {
     // Calls the gas method for each car once
     void gas(int amount) {
         double gas = ((double) amount) / 100;
-        for (Car car : cars
+        for (Vehicle vehicle : vehicles
         ) {
-            car.gas(gas);
+            vehicle.gas(gas);
         }
     }
 
     void brake(int amount) {
         double brake = ((double) amount) / 100;
-        for (Car car : cars){
-            car.brake(brake);
+        for (Vehicle vehicle : vehicles){
+            vehicle.brake(brake);
 
         }
     }
 
     void startEngine(){
-        for (Car car : cars){
-            car.startEngine();
+        for (Vehicle vehicle : vehicles){
+            vehicle.startEngine();
         }
     }
 
     void stopEngine(){
-        for (Car car : cars){
-            car.stopEngine();
+        for (Vehicle vehicle : vehicles){
+            vehicle.stopEngine();
         }
     }
 
      static void turnRight(){
-        for (Car car : cars){
-            car.turnRight();
+        for (Vehicle vehicle : vehicles){
+            vehicle.turnRight();
         }
     }
     static void turnLeft(){
-        for (Car car: cars){
-            car.turnLeft();
+        for (Vehicle vehicle : vehicles){
+            vehicle.turnLeft();
         }
     }
 
     static void up(){
-        for (Car car: cars){
-            car.up();
+        for (Vehicle vehicle : vehicles){
+            vehicle.up();
         }
     }
     static void down(){
-        for(Car car: cars){
-            car.down();
+        for(Vehicle vehicle : vehicles){
+            vehicle.down();
         }
     }
 
