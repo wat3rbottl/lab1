@@ -104,22 +104,19 @@ public abstract class Vehicle implements Movable {
 
     @Override
     public void turnRight() {
-        switch (direction) {
-            case NORTH -> direction = Direction.EAST;
-            case SOUTH -> direction = Direction.WEST;
-            case WEST -> direction = Direction.NORTH;
-            case EAST -> direction = Direction.SOUTH;
-        }
+        direction = Direction.EAST;
     }
 
     @Override
     public void turnLeft() {
-        switch (direction) {
-            case NORTH -> direction = Direction.WEST;
-            case SOUTH -> direction = Direction.EAST;
-            case WEST -> direction = Direction.SOUTH;
-            case EAST -> direction = Direction.NORTH;
-        }
+       direction = Direction.WEST;
+    }
+
+    public void up(){
+        direction = Direction.SOUTH;
+    }
+    public void down(){
+        direction = Direction.NORTH;
     }
 
     public void gas(double amount) {

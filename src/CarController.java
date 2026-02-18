@@ -21,10 +21,11 @@ public class CarController {
     // each step between delays.
     private Timer timer = new Timer(delay, new TimerListener());
 
+
     // The frame that represents this instance View of the MVC pattern
     CarView frame;
     // A list of cars, modify if needed
-    ArrayList<Car> cars = new ArrayList<>();
+    static ArrayList<Car> cars = new ArrayList<>();
 
     //methods:
 
@@ -63,6 +64,7 @@ public class CarController {
                         car.setDirection(Vehicle.Direction.WEST);
                         car.move();
                         frame.drawPanel.moveit(x, y);
+                        DrawPanel.flipped = true;
                         frame.drawPanel.repaint();
                     }
                     else{
@@ -78,6 +80,7 @@ public class CarController {
                         car.setDirection(Vehicle.Direction.SOUTH);
                         car.move();
                         frame.drawPanel.moveit(x, y);
+                        DrawPanel.flipped = true;
                         frame.drawPanel.repaint();
                     } else {
                         car.setDirection(Vehicle.Direction.NORTH);
@@ -120,10 +123,27 @@ public class CarController {
         }
     }
 
-    void turnRight(){
+     static void turnRight(){
         for (Car car : cars){
             car.turnRight();
         }
     }
+    static void turnLeft(){
+        for (Car car: cars){
+            car.turnLeft();
+        }
+    }
+
+    static void up(){
+        for (Car car: cars){
+            car.up();
+        }
+    }
+    static void down(){
+        for(Car car: cars){
+            car.down();
+        }
+    }
+
 
 }
