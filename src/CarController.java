@@ -5,10 +5,9 @@ import java.util.ArrayList;
 
 import static java.lang.Math.abs;
 
-
 /*
  * This class represents the Controller part in the MVC pattern.
- * It's responsibilities is to listen to the View and responds in a appropriate manner by
+ * Its responsibilities is to listen to the View and responds in a appropriate manner by
  * modifying the model state and the updating the view.
  */
 
