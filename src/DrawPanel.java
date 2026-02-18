@@ -26,16 +26,13 @@ public class DrawPanel extends JPanel{
     Point volvoWorkshopPoint = new Point(300,300);
 
     // TODO: Make this general for all cars
-    void moveit(int x, int  y){
+    void moveit(int x, int  y, Vehicle vehicle){
 
-        volvoPoint.x = x;
-        volvoPoint.y = y;
+        if (Volvo240) {
+            volvoPoint.x = x;
+            volvoPoint.y = y;
 
-        saabPoint.x = x;
-        saabPoint.y = y;
 
-        scaniaPoint.x = x;
-        scaniaPoint.y = y;
     }
 
     // Initializes the panel and reads the images
@@ -47,8 +44,8 @@ public class DrawPanel extends JPanel{
         try {
             volvoImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Volvo240.jpg"));
             volvoWorkshopImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/VolvoBrand.jpg"));
-            saabImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Saab95.jpg"));
-            scaniaImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Scania.jpg"));
+            saabImage = ImageIO.read(DrawPanel.class.getResourceAsStream("/pics/Saab95.jpg"));
+            scaniaImage = ImageIO.read(DrawPanel.class.getResourceAsStream("/pics/Scania.jpg"));
 
         } catch (IOException ex)
         {

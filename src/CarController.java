@@ -64,7 +64,7 @@ public class CarController {
                     if(vehicle.getDirection() == Vehicle.Direction.EAST){
                         vehicle.setDirection(Vehicle.Direction.WEST);
                         vehicle.move();
-                        frame.drawPanel.moveit(x, y);
+                        frame.drawPanel.moveit(x, y, vehicle);
                         DrawPanel.flipped = true;
                         frame.drawPanel.repaint();
                     }
