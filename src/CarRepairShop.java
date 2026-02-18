@@ -5,8 +5,25 @@ public class CarRepairShop<T extends Car> implements Transporter<T>{
     private final int capacity;
     private ArrayList<T> cars = new ArrayList<>();
 
-    public CarRepairShop(int maxCars){
+    private double x; // The shops x coordinate
+    private double y; // The shops y coordinate
+
+    public CarRepairShop(int maxCars, double x, double y) {
+        this.x = x;
+        this.y = y;
         capacity = maxCars;
+    }
+//    public void setPosition(double x, double y){
+//        this.x = x;
+//        this.y = y;
+//    }
+
+    public double getX(){
+        return x;
+    }
+
+    public double getY(){
+        return y;
     }
 
     public int getCapacity(){
@@ -29,7 +46,7 @@ public class CarRepairShop<T extends Car> implements Transporter<T>{
         if(cars.isEmpty()){
             return null;
         }
-        return cars.removeFirst();
+        return cars.remove(0);
     }
 
     public int newCustomerIndex(){

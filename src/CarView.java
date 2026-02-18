@@ -62,7 +62,6 @@ public class CarView extends JFrame{
 
         this.add(drawPanel);
 
-
         SpinnerModel spinnerModel =
                 new SpinnerNumberModel(0, //initial value
                         0, //min
@@ -75,7 +74,6 @@ public class CarView extends JFrame{
                 brakeAmount = (int) ((JSpinner) e.getSource()).getValue();
             }
         });
-
 
         gasPanel.setLayout(new BorderLayout());
         gasPanel.add(gasLabel, BorderLayout.PAGE_START);
@@ -148,6 +146,20 @@ public class CarView extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 carC.turboOff();
+            }
+        });
+
+        lowerBedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                carC.lowerBed();
+            }
+        });
+
+        liftBedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                carC.raiseBed();
             }
         });
 

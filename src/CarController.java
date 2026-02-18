@@ -25,8 +25,9 @@ public class CarController {
     CarView frame;
     // A list of cars, modify if needed
     static ArrayList<Vehicle> vehicles = new ArrayList<>();
+    CarRepairShop<Volvo240> volvoRepair = new CarRepairShop<>(5,300,300);
 
-    //methods:
+    private final ArrayList<Vehicle> toRemove = new ArrayList<>();
 
     public static void main(String[] args) {
         // Instance of this class
@@ -52,9 +53,6 @@ public class CarController {
     /* Each step the TimerListener moves all the cars in the list and tells the
      * view to update its images. Change this method to your needs.
      * */
-
-    // DEN BYTER EJ RIKTNING OM DEN KÖR FÖR LÅNGT I Y_LED
-
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             for (Vehicle vehicle : vehicles) {
@@ -68,11 +66,20 @@ public class CarController {
                 else if(x <= 1 && vehicle.getDirection() == Vehicle.Direction.WEST) {
                     vehicle.setDirection(Vehicle.Direction.EAST);
                 }
-                if (y >= 480 && vehicle.getDirection() == Vehicle.Direction.NORTH) {
+                if (y >= 500 && vehicle.getDirection() == Vehicle.Direction.NORTH) {
                     vehicle.setDirection(Vehicle.Direction.SOUTH);
                 }
                 else if (y <= 1 && vehicle.getDirection() == Vehicle.Direction.SOUTH) {
                         vehicle.setDirection(Vehicle.Direction.NORTH);
+                }
+
+                if(vehicle instanceof Volvo240 volvo) {
+                    if (abs(x - volvoRepair.getX()) < 10 && abs(y - volvoRepair.getY()) < 10 &&
+                            volvoRepair.numCars() < volvoRepair.getCapacity()) {
+                                volvoRepair.load(volvo);
+                                toRemove.add(volvo);
+                                continue;
+                    }
                 }
 
                 vehicle.move();
@@ -85,6 +92,8 @@ public class CarController {
                 frame.drawPanel.moveit(vehicle, newX, newY, flipped);
             }
             frame.drawPanel.repaint();
+            vehicles.removeAll(toRemove);
+            toRemove.clear();
         }
     }
 
@@ -155,6 +164,21 @@ public class CarController {
         for (Vehicle vehicle : vehicles) {
             if (vehicle instanceof Saab95 saab) {
                 saab.setTurboOff();
+            }
+        }
+    }
+
+    void lowerBed(){
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle instanceof Scania scania) {
+                scania.lower();
+            }
+        }
+    }
+    void raiseBed(){
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle instanceof Scania scania) {
+                scania.raise();
             }
         }
     }
