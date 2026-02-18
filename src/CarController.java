@@ -7,7 +7,7 @@ import static java.lang.Math.abs;
 
 /*
  * This class represents the Controller part in the MVC pattern.
- * Its responsibilities is to listen to the View and responds in a appropriate manner by
+ * Its responsibilities are to listen to the View and respond in an appropriate manner by
  * modifying the model state and the updating the view.
  */
 
@@ -38,7 +38,9 @@ public class CarController {
         Saab95 saab = new Saab95();
         saab.setPosition(0, 200);
         vehicles.add(saab);
-        vehicles.add(new Scania<>());
+        Scania<?> scania = new Scania<>();
+        scania.setPosition(0, 300);
+        vehicles.add(scania);
 
         // Start a new view and send a reference of self
         cc.frame = new CarView("CarSim 1.0", cc);
@@ -50,6 +52,9 @@ public class CarController {
     /* Each step the TimerListener moves all the cars in the list and tells the
      * view to update its images. Change this method to your needs.
      * */
+
+    // DEN BYTER EJ RIKTNING OM DEN KÖR FÖR LÅNGT I Y_LED
+
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             for (Vehicle vehicle : vehicles) {
@@ -57,18 +62,17 @@ public class CarController {
                 int x = (int) Math.round(vehicle.getX());
                 int y = (int) Math.round(vehicle.getY());
 
-                if (x >= 700 || x < 1) {
-                    if (vehicle.getDirection() == Vehicle.Direction.EAST) {
-                        vehicle.setDirection(Vehicle.Direction.WEST);
-                    } else {
-                        vehicle.setDirection(Vehicle.Direction.EAST);
-                    }
-                } else if (y >= 460 || y < 1) {
-                    if (vehicle.getDirection() == Vehicle.Direction.NORTH) {
-                        vehicle.setDirection(Vehicle.Direction.SOUTH);
-                    } else {
+                if (x >= 699 && vehicle.getDirection() == Vehicle.Direction.EAST) {
+                    vehicle.setDirection(Vehicle.Direction.WEST);
+                }
+                else if(x <= 1 && vehicle.getDirection() == Vehicle.Direction.WEST) {
+                    vehicle.setDirection(Vehicle.Direction.EAST);
+                }
+                if (y >= 480 && vehicle.getDirection() == Vehicle.Direction.NORTH) {
+                    vehicle.setDirection(Vehicle.Direction.SOUTH);
+                }
+                else if (y <= 1 && vehicle.getDirection() == Vehicle.Direction.SOUTH) {
                         vehicle.setDirection(Vehicle.Direction.NORTH);
-                    }
                 }
 
                 vehicle.move();
@@ -119,21 +123,23 @@ public class CarController {
         }
     }
 
-    static void turnLeft() {
+    void turnLeft() {
         for (Vehicle vehicle : vehicles) {
             vehicle.turnLeft();
         }
     }
 
-    static void up() {
+    void up() {
         for (Vehicle vehicle : vehicles) {
-            vehicle.up();
+            //vehicle.up();
+            vehicle.setDirection(Vehicle.Direction.SOUTH);
         }
     }
 
-    static void down() {
+    void down() {
         for (Vehicle vehicle : vehicles) {
-            vehicle.down();
+            //vehicle.down();
+            vehicle.setDirection(Vehicle.Direction.NORTH);
         }
     }
 

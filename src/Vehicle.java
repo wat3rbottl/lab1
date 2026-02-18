@@ -113,10 +113,10 @@ public abstract class Vehicle implements Movable {
     }
 
     public void up(){
-        direction = Direction.SOUTH;
+        direction = Direction.NORTH;
     }
     public void down(){
-        direction = Direction.NORTH;
+        direction = Direction.SOUTH;
     }
 
     public void gas(double amount) {

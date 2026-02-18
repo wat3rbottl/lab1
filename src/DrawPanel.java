@@ -17,7 +17,7 @@ public class DrawPanel extends JPanel {
     // To keep track of the cars positions
     Point volvoPoint = new Point(0, 100);
     Point saabPoint = new Point(0, 200);
-    Point scaniaPoint = new Point();
+    Point scaniaPoint = new Point(0, 300);
 
     // Keeps track if image should be flipped
     protected static boolean flipped = false;
@@ -29,7 +29,6 @@ public class DrawPanel extends JPanel {
     Point volvoWorkshopPoint = new Point(300, 300);
 
     // TODO: Make this general for all cars
-    // Ny moveit: uppdaterar rätt bil + (valfritt) flipped
     void moveit(Vehicle v, int x, int y, boolean flipped) {
         if (v instanceof Volvo240) {
             volvoPoint.x = x;
@@ -46,9 +45,11 @@ public class DrawPanel extends JPanel {
         }
     }
 
-
+    // CarController obj
+    private final CarController controller;
     // Initializes the panel and reads the images
-    public DrawPanel(int x, int y) {
+    public DrawPanel(int x, int y, CarController controller) {
+        this.controller = controller;
         this.setDoubleBuffered(true);
         this.setPreferredSize(new Dimension(x, y));
         this.setBackground(Color.pink);
@@ -62,7 +63,6 @@ public class DrawPanel extends JPanel {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
         // Makes program accept keyboard commands
         setupKeyBindings();
     }
@@ -108,7 +108,7 @@ public class DrawPanel extends JPanel {
             am.put("left", new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    CarController.turnLeft();
+                    controller.turnLeft();
                     repaint();
                 }
             });
@@ -116,26 +116,23 @@ public class DrawPanel extends JPanel {
             am.put("right", new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    CarController.turnRight();
+                    controller.turnRight();
                     repaint();
-
                 }
-
             });
 
             am.put("up", new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    CarController.up();
+                    controller.up();
                     repaint();
-
                 }
             });
 
             am.put("down", new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    CarController.down();
+                    controller.down();
                     repaint();
                 }
             });
