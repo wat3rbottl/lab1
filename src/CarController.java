@@ -8,7 +8,7 @@ import static java.lang.Math.abs;
 
 /*
  * This class represents the Controller part in the MVC pattern.
- * It's responsibilities is to listen to the View and responds in a appropriate manner by
+ * Its responsibilities are to listen to the View and respond in an appropriate manner by
  * modifying the model state and the updating the view.
  */
 
@@ -21,10 +21,11 @@ public class CarController {
     // each step between delays.
     private Timer timer = new Timer(delay, new TimerListener());
 
+
     // The frame that represents this instance View of the MVC pattern
     CarView frame;
     // A list of cars, modify if needed
-    ArrayList<Car> cars = new ArrayList<>();
+    static ArrayList<Car> cars = new ArrayList<>();
 
     //methods:
 
@@ -67,6 +68,7 @@ public class CarController {
                     }
                     car.move();
                     frame.drawPanel.moveit(x, y);
+                    DrawPanel.flipped = true;
                     frame.drawPanel.repaint();
                 }
 
@@ -78,6 +80,7 @@ public class CarController {
                     }
                     car.move();
                     frame.drawPanel.moveit(x, y);
+                    DrawPanel.flipped = true;
                     frame.drawPanel.repaint();
                 }
             }
@@ -114,10 +117,27 @@ public class CarController {
         }
     }
 
-    void turnRight(){
+     static void turnRight(){
         for (Car car : cars){
             car.turnRight();
         }
     }
+    static void turnLeft(){
+        for (Car car: cars){
+            car.turnLeft();
+        }
+    }
+
+    static void up(){
+        for (Car car: cars){
+            car.up();
+        }
+    }
+    static void down(){
+        for(Car car: cars){
+            car.down();
+        }
+    }
+
 
 }
