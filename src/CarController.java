@@ -140,15 +140,13 @@ public class CarController {
 
     void up() {
         for (Vehicle vehicle : vehicles) {
-            //vehicle.up();
-            vehicle.setDirection(Vehicle.Direction.SOUTH);
+            vehicle.down();                 // Because y axis is inverted in the car sim
         }
     }
 
     void down() {
         for (Vehicle vehicle : vehicles) {
-            //vehicle.down();
-            vehicle.setDirection(Vehicle.Direction.NORTH);
+            vehicle.up();                   // Because y axis is inverted in the car sim
         }
     }
 

@@ -1,0 +1,141 @@
+@startuml
+skinparam classAttributeIconSize 0
+title UML - Lab3
+
+' =========================
+' Interfaces
+' =========================
+interface Movable{
+  + move() : void
+  + turnLeft() : void
+  + turnRight() : void
+}
+
+interface Transportable
+
+interface Transporter {
+  + load(item) : void
+  + unload()
+}
+
+enum Direction {
+  NORTH
+  SOUTH
+  EAST
+  WEST
+}
+
+' =========================
+' Domain model
+' =========================
+abstract class Vehicle {
+  + getX() : double
+  + getY() : double
+  + getDirection() : Direction
+  + setDirection(dir: Direction) : void
+  + move() : void
+  + turnRight() : void
+  + turnLeft() : void
+  + up() : void
+  + down() : void
+  + gas(amount: double) : void
+  + brake(amount: double) : void
+  + startEngine() : void
+  + stopEngine() : void
+  + speedFactor() : double
+}
+
+abstract class Car
+abstract class RampVehicle{
+  + raise() : void
+  + lower() : void
+  + canLoad() : boolean
+  + startEngine() : void
+  + load() : void
+  + unload()
+}
+
+class Volvo240{
+  - trimFactor : double
+  + SpeedFactor() : double
+}
+
+class Saab95{
+   - turboOn : boolean
+   + SpeedFactor() : double
+}
+
+class Scania{
+  - rampDeg : int
+  + raise() : void
+  + lower() : void
+}
+
+class CarFerry {
+  - capacityPerLane : int
+  - lanes : List<Queue<Car>>
+  + load() : void
+  + unload() : Car
+  + unload(int: laneIndex) : Car
+}
+
+class VolkswagenUnicorn{
+  - cars : Stack
+  - capacity : int
+  + speedFactor() : double
+  + load() : void
+  + unload() : Car
+  + move() : void
+}
+
+class CarRepairShop {
+  - capacity : int
+  - cars : ArrayList
+  + load(item) : void
+  + unload() : Car
+}
+
+' =========================
+' GUI (Lab2)
+' =========================
+class CarController
+class CarView
+class DrawPanel
+
+' =========================
+' Relationships
+' =========================
+
+' Realization
+Vehicle ..|> Movable
+Car ..|> Transportable
+RampVehicle ..|> Transporter
+CarRepairShop ..|> Transporter
+
+' Inheritance
+Vehicle <|-- Car
+Vehicle <|-- RampVehicle
+
+Car <|-- Volvo240
+Car <|-- Saab95
+
+RampVehicle <|-- Scania
+RampVehicle <|-- CarFerry
+RampVehicle <|-- VolkswagenUnicorn
+
+' Vehicle owns/uses Direction
+Vehicle --> Direction : direction
+
+' Associations (fields)
+CarController --> CarView : frame
+CarView --> DrawPanel : drawPanel
+CarController --> Vehicle : vehicles (0..*)
+CarController --> CarRepairShop : volvoRepair
+
+' Usage dependencies
+DrawPanel ..> Vehicle : reads positions\nand renders images
+DrawPanel ..> CarController : keybindings/actions\ncall controller
+CarController ..> Volvo240 : creates
+CarController ..> Saab95 : creates
+CarController ..> Scania : creates
+@enduml
