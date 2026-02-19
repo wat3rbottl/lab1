@@ -6,28 +6,40 @@ title Refaktoriseringsplan
 ' Core interfaces
 ' =========================
 interface Movable {
-  + move()
+  + move() : void
+  + turnRight() : void
+  + turnLeft() : void
 }
-interface Transportable {
+
+interface Loadable{
+  - isLoaded() : boolean
+}
+
+interface Loader{
+  + load(item) : void
+  + unload()
+}
+
+interface Transportable extends Loadable {
   + getPosition() : Position
   + setPosition(p: Position)
 }
-interface Transporter {
-  + load(item)
-  + unload()
+
+interface Transporter extends Loader {
   + updateLoadedPositions()
 }
-
-note right of Transporter
-Generic intent:
-Transporter<T extends Transportable>
-load(T), unload(): T
-updateLoadedPositions(): moves loaded items with transporter
-end note
 
 interface Turboable {
   + setTurboOn()
   + setTurboOff()
+}
+
+interface Ramp {
+   - atMax : boolean
+   - atMin : boolean
+   + lower(deg) : void
+   + lift(deg) : void
+   + canLoad() : boolean
 }
 
 ' =========================
@@ -69,14 +81,11 @@ enum Direction {
 ' =========================
 ' Domain model
 ' =========================
-abstract class Vehicle implements Movable, Transportable {
+abstract class Vehicle implements Movable{
   - position : Position
   - engine : Engine
   - speedModel : SpeedModel
   - direction : Direction
-  - nrDoors : int
-  - color : Color
-  - modelName : String
   + getPosition() : Position
   + setPosition(p: Position)
   + getDirection() : Direction
@@ -88,30 +97,24 @@ abstract class Vehicle implements Movable, Transportable {
   + move()
 }
 
-abstract class Car extends Vehicle
+abstract class Car extends Vehicle implements Transportable, Transporter
 
 class Volvo240 extends Car
 class Saab95 extends Car implements Turboable
 
 ' Transporters
-abstract class VehicleTransporter extends Vehicle implements Transporter
-class RampVehicle extends VehicleTransporter
-class Scania extends RampVehicle
-class CarFerry extends VehicleTransporter
+abstract class CarTransporter extends Vehicle implements Transporter
+class Scania extends Vehicle implements Ramp, Transporter
+class CarFerry extends CarTransporter
+class VolkswagenUnicorn extends CarTransporter implements Ramp
 
-class RepairShop implements Transporter
-note right of RepairShop
-Refactor: RepairShop loads Transportable (not only Car)
-end note
+class RepairShop implements Loader
 
 class LaneManager {
-  + enqueue(item)
-  + dequeue()
+  + addToQueue(item)
+  + removeFromQueue()
   + size() : int
 }
-note right of LaneManager
-Used by Ferry to manage lanes/queues.
-end note
 
 ' =========================
 ' Simulation & rules
@@ -135,16 +138,16 @@ class CarController {
   - simulation : Simulation
   - input : InputHandler
   - view : CarView
-  + onGas(amount:int)
-  + onBrake(amount:int)
-  + onStartAll()
-  + onStopAll()
-  + onTurnLeft()
-  + onTurnRight()
-  + onUp()
-  + onDown()
-  + onTurboOn()
-  + onTurboOff()
+  + Gas(amount:int)
+  + Brake(amount:int)
+  + StartAll()
+  + StopAll()
+  + TurnLeft()
+  + TurnRight()
+  + Up()
+  + Down()
+  + TurboOn()
+  + TurboOff()
 }
 
 class InputHandler {
@@ -153,24 +156,19 @@ class InputHandler {
   + bindButtons(view: CarView)
 }
 
-class VehicleImages {
-  + getImageKey(v: Transportable) : String
-  + isFlipped(v: Vehicle) : boolean
+class ImageHandler {
+  + getImageKey(Obj : object) : String
+  + isFlipped(Obj : object) : boolean
 }
 
 class DrawPanel {
-  - images : VehicleImages
+  - images : ImageHandler
   - vehicles : List
   + setVehicles(vehicles: List)
   + paintComponent(g: Graphics)
 }
 
 class CarView
-class JFrame <<library>>
-class JPanel <<library>>
-class JComponent <<library>>
-class Rectangle <<library>>
-class Graphics <<library>>
 
 ' =========================
 ' Relationships
@@ -186,16 +184,17 @@ Vehicle --> Direction
 Vehicle <|-- Car
 Car <|-- Volvo240
 Car <|-- Saab95
-
-Vehicle <|-- VehicleTransporter
-VehicleTransporter <|-- RampVehicle
-RampVehicle <|-- Scania
-VehicleTransporter <|-- CarFerry
+Vehicle <|-- CarTransporter
+CarTransporter <|-- VolkswagenUnicorn
+CarTransporter <|-- CarFerry
+Vehicle <|-- Scania
 
 ' Realizations
-VehicleTransporter ..|> Transporter
-RepairShop ..|> Transporter
+CarTransporter ..|> Transporter
+RepairShop ..|> Loader
 Saab95 ..|> Turboable
+Scania ..|> Ramp
+VolkswagenUnicorn ..|> Ramp
 
 ' Ferry uses LaneManager
 CarFerry --> LaneManager : lanes
@@ -216,7 +215,7 @@ CarController --> InputHandler
 
 InputHandler --> CarController
 
-DrawPanel --> VehicleImages
+DrawPanel --> ImageHandler
 DrawPanel ..> Transportable : renders list
 
 CarView --> DrawPanel

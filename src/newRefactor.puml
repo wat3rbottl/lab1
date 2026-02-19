@@ -1,6 +1,6 @@
 @startuml
 skinparam classAttributeIconSize 0
-title UML - Lab3 Uppgift 4 (Ny design / Efter refaktor)
+title UML refaktoriseringsplan
 
 ' =========================
 ' Interfaces (abstraherar modellen)
@@ -9,6 +9,10 @@ interface Movable {
   + move() : void
   + turnLeft() : void
   + turnRight() : void
+}
+
+interface Transporter{
+
 }
 
 interface Transportable {
@@ -131,10 +135,6 @@ class VehicleImages {
   + getImageKey(t: Transportable) : String
   + shouldFlip(v: Vehicle) : boolean
 }
-
-class JFrame <<library>>
-class JPanel <<library>>
-class Graphics <<library>>
 
 ' =========================
 ' Relationships
