@@ -20,4 +20,4 @@
 # Build output
 out/
 !/.idea/vcs.xml
-!/UML-UML___Lab3.png
+*.png

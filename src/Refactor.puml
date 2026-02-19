@@ -1,0 +1,224 @@
+@startuml
+skinparam classAttributeIconSize 0
+title Refaktoriseringsplan
+
+' =========================
+' Core interfaces
+' =========================
+interface Movable {
+  + move()
+}
+interface Transportable {
+  + getPosition() : Position
+  + setPosition(p: Position)
+}
+interface Transporter {
+  + load(item)
+  + unload()
+  + updateLoadedPositions()
+}
+
+note right of Transporter
+Generic intent:
+Transporter<T extends Transportable>
+load(T), unload(): T
+updateLoadedPositions(): moves loaded items with transporter
+end note
+
+interface Turboable {
+  + setTurboOn()
+  + setTurboOff()
+}
+
+' =========================
+' Decomposition: Vehicle parts
+' =========================
+class Position {
+  - x : double
+  - y : double
+  + getX() : double
+  + getY() : double
+  + setX(x: double)
+  + setY(y: double)
+}
+
+class Engine {
+  - started : boolean
+  - enginePower : double
+  - currentSpeed : double
+  + start()
+  + stop()
+  + isStarted() : boolean
+  + getCurrentSpeed() : double
+  + setCurrentSpeed(v: double)
+}
+
+class SpeedModel {
+  + speedFactor() : double
+  + incrementSpeed(engine: Engine, amount: double)
+  + decrementSpeed(engine: Engine, amount: double)
+}
+
+enum Direction {
+  NORTH
+  SOUTH
+  EAST
+  WEST
+}
+
+' =========================
+' Domain model
+' =========================
+abstract class Vehicle implements Movable, Transportable {
+  - position : Position
+  - engine : Engine
+  - speedModel : SpeedModel
+  - direction : Direction
+  - nrDoors : int
+  - color : Color
+  - modelName : String
+  + getPosition() : Position
+  + setPosition(p: Position)
+  + getDirection() : Direction
+  + setDirection(d: Direction)
+  + startEngine()
+  + stopEngine()
+  + gas(amount: double)
+  + brake(amount: double)
+  + move()
+}
+
+abstract class Car extends Vehicle
+
+class Volvo240 extends Car
+class Saab95 extends Car implements Turboable
+
+' Transporters
+abstract class VehicleTransporter extends Vehicle implements Transporter
+class RampVehicle extends VehicleTransporter
+class Scania extends RampVehicle
+class CarFerry extends VehicleTransporter
+
+class RepairShop implements Transporter
+note right of RepairShop
+Refactor: RepairShop loads Transportable (not only Car)
+end note
+
+class LaneManager {
+  + enqueue(item)
+  + dequeue()
+  + size() : int
+}
+note right of LaneManager
+Used by Ferry to manage lanes/queues.
+end note
+
+' =========================
+' Simulation & rules
+' =========================
+class Simulation {
+  - vehicles : List
+  - transporters : List
+  - repairShop : RepairShop
+  - wallHandler : WallCollisionHandler
+  + tick()
+}
+
+class WallCollisionHandler {
+  + handle(vehicle: Vehicle, bounds: Rectangle)
+}
+
+' =========================
+' GUI / MVC refactor
+' =========================
+class CarController {
+  - simulation : Simulation
+  - input : InputHandler
+  - view : CarView
+  + onGas(amount:int)
+  + onBrake(amount:int)
+  + onStartAll()
+  + onStopAll()
+  + onTurnLeft()
+  + onTurnRight()
+  + onUp()
+  + onDown()
+  + onTurboOn()
+  + onTurboOff()
+}
+
+class InputHandler {
+  - controller : CarController
+  + bindKeyboard(component: JComponent)
+  + bindButtons(view: CarView)
+}
+
+class VehicleImages {
+  + getImageKey(v: Transportable) : String
+  + isFlipped(v: Vehicle) : boolean
+}
+
+class DrawPanel {
+  - images : VehicleImages
+  - vehicles : List
+  + setVehicles(vehicles: List)
+  + paintComponent(g: Graphics)
+}
+
+class CarView
+class JFrame <<library>>
+class JPanel <<library>>
+class JComponent <<library>>
+class Rectangle <<library>>
+class Graphics <<library>>
+
+' =========================
+' Relationships
+' =========================
+
+' Composition of Vehicle
+Vehicle *-- Position
+Vehicle *-- Engine
+Vehicle *-- SpeedModel
+Vehicle --> Direction
+
+' Inheritance
+Vehicle <|-- Car
+Car <|-- Volvo240
+Car <|-- Saab95
+
+Vehicle <|-- VehicleTransporter
+VehicleTransporter <|-- RampVehicle
+RampVehicle <|-- Scania
+VehicleTransporter <|-- CarFerry
+
+' Realizations
+VehicleTransporter ..|> Transporter
+RepairShop ..|> Transporter
+Saab95 ..|> Turboable
+
+' Ferry uses LaneManager
+CarFerry --> LaneManager : lanes
+
+' Simulation owns rule handler and aggregates world objects
+Simulation --> WallCollisionHandler
+Simulation o-- Vehicle : vehicles
+Simulation o-- VehicleTransporter : transporters
+Simulation --> RepairShop : repairShop
+
+' GUI
+JFrame <|-- CarView
+JPanel <|-- DrawPanel
+
+CarController --> Simulation
+CarController --> CarView
+CarController --> InputHandler
+
+InputHandler --> CarController
+
+DrawPanel --> VehicleImages
+DrawPanel ..> Transportable : renders list
+
+CarView --> DrawPanel
+
+@enduml

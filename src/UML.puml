@@ -14,8 +14,9 @@ interface Movable{
 interface Transportable
 
 interface Transporter {
-  + load(item) : void
+  + load(T item) : void
   + unload()
+  + updateLoadedPositions: void
 }
 
 enum Direction {
@@ -51,13 +52,13 @@ abstract class RampVehicle{
   + lower() : void
   + canLoad() : boolean
   + startEngine() : void
-  + load() : void
+  + load(T item) : void
   + unload()
 }
 
 class Volvo240{
   - trimFactor : double
-  + SpeedFactor() : double
+  + speedFactor() : double
 }
 
 class Saab95{

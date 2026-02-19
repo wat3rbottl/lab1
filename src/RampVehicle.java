@@ -4,7 +4,7 @@ public abstract class RampVehicle<T extends Transportable> extends Vehicle imple
     private boolean rampUp;
 
     public RampVehicle(int doors, double EnginePower, Color dye, String name) {
-        super(doors, EnginePower, dye, name);-
+        super(doors, EnginePower, dye, name);z
         rampUp = true;
     }
 
