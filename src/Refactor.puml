@@ -20,12 +20,12 @@ interface Loader{
   + unload()
 }
 
-interface Transportable extends Loadable {
+interface Transportable  {
   + getPosition() : Position
   + setPosition(p: Position)
 }
 
-interface Transporter extends Loader {
+interface Transporter  {
   + updateLoadedPositions()
 }
 
@@ -81,7 +81,7 @@ enum Direction {
 ' =========================
 ' Domain model
 ' =========================
-abstract class Vehicle implements Movable{
+abstract class Vehicle {
   - position : Position
   - engine : Engine
   - speedModel : SpeedModel
@@ -97,18 +97,18 @@ abstract class Vehicle implements Movable{
   + move()
 }
 
-abstract class Car extends Vehicle implements Transportable, Transporter
+abstract class Car
 
-class Volvo240 extends Car
-class Saab95 extends Car implements Turboable
+class Volvo240
+class Saab95
 
 ' Transporters
-abstract class CarTransporter extends Vehicle implements Transporter
-class Scania extends Vehicle implements Ramp, Transporter
-class CarFerry extends CarTransporter
-class VolkswagenUnicorn extends CarTransporter implements Ramp
+abstract class CarTransporter
+class Scania
+class CarFerry
+class VolkswagenUnicorn
 
-class RepairShop implements Loader
+class RepairShop
 
 class LaneManager {
   + addToQueue(item)
@@ -189,12 +189,19 @@ CarTransporter <|-- VolkswagenUnicorn
 CarTransporter <|-- CarFerry
 Vehicle <|-- Scania
 
+
 ' Realizations
 CarTransporter ..|> Transporter
 RepairShop ..|> Loader
 Saab95 ..|> Turboable
 Scania ..|> Ramp
 VolkswagenUnicorn ..|> Ramp
+Car ..|> Loadable
+Car ..|> Transportable
+Vehicle ..|> Movable
+Transporter ..|> Loader
+Transportable ..|> Loadable
+
 
 ' Ferry uses LaneManager
 CarFerry --> LaneManager : lanes
@@ -211,7 +218,6 @@ JPanel <|-- DrawPanel
 
 CarController --> Simulation
 CarController --> CarView
-CarController --> InputHandler
 
 InputHandler --> CarController
 
