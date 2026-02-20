@@ -61,16 +61,24 @@ public class CarController {
                 int y = (int) Math.round(vehicle.getY());
 
                 if (x >= 699 && vehicle.getDirection() == Vehicle.Direction.EAST) {
+                    vehicle.stopEngine();
                     vehicle.setDirection(Vehicle.Direction.WEST);
+                    vehicle.startEngine();
                 }
                 else if(x <= 1 && vehicle.getDirection() == Vehicle.Direction.WEST) {
+                    vehicle.stopEngine();
                     vehicle.setDirection(Vehicle.Direction.EAST);
+                    vehicle.startEngine();
                 }
                 if (y >= 500 && vehicle.getDirection() == Vehicle.Direction.NORTH) {
+                    vehicle.stopEngine();
                     vehicle.setDirection(Vehicle.Direction.SOUTH);
+                    vehicle.startEngine();
                 }
                 else if (y <= 1 && vehicle.getDirection() == Vehicle.Direction.SOUTH) {
-                        vehicle.setDirection(Vehicle.Direction.NORTH);
+                    vehicle.stopEngine();
+                    vehicle.setDirection(Vehicle.Direction.NORTH);
+                    vehicle.startEngine();
                 }
 
                 if(vehicle instanceof Volvo240 volvo) {
