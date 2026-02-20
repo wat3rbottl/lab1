@@ -120,7 +120,7 @@ public abstract class Vehicle implements Movable {
     }
 
     public void gas(double amount) {
-        if (0 <= amount && amount <= 1) {
+        if (0 <= amount && amount <= 1  && getCurrentSpeed() > 0) {
             incrementSpeed(amount);
         }
     }
