@@ -1,5 +1,2 @@
-public interface Transporter<T extends Transportable> {
-    public void load(T item);
-
-    public T unload();
+public interface Transporter<T extends Transportable> extends Loader<T>{
 }

@@ -1,4 +1,4 @@
-public interface Movable {
+public interface Movable extends HasPosition {
 
     public void move();
 

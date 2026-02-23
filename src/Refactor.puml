@@ -12,7 +12,7 @@ interface Movable {
 }
 
 interface Loadable{
-  - isLoaded() : boolean
+  + isLoaded() : boolean
 }
 
 interface Loader{
@@ -119,12 +119,8 @@ class LaneManager {
 ' =========================
 ' Simulation & rules
 ' =========================
-class Simulation {
+class VehicleSimulation {
   - vehicles : List
-  - transporters : List
-  - repairShop : RepairShop
-  - wallHandler : WallCollisionHandler
-  + tick()
 }
 
 class WallCollisionHandler {
@@ -174,13 +170,18 @@ class CarView
 ' Relationships
 ' =========================
 
-' Composition of Vehicle
-Vehicle *-- Position
-Vehicle *-- Engine
-Vehicle *-- SpeedModel
+' Komposition
+Vehicle --> Position
+Vehicle --> Engine
+Vehicle --> SpeedModel
 Vehicle --> Direction
+CarController --> VehicleSimulation
+CarController --> CarView
+InputHandler <-- CarController
 
-' Inheritance
+
+
+' Generalisering
 Vehicle <|-- Car
 Car <|-- Volvo240
 Car <|-- Saab95
@@ -188,41 +189,34 @@ Vehicle <|-- CarTransporter
 CarTransporter <|-- VolkswagenUnicorn
 CarTransporter <|-- CarFerry
 Vehicle <|-- Scania
+' Ferry uses LaneManager
+CarFerry --> LaneManager
 
 
-' Realizations
+' Realisering
 CarTransporter ..|> Transporter
 RepairShop ..|> Loader
 Saab95 ..|> Turboable
 Scania ..|> Ramp
 VolkswagenUnicorn ..|> Ramp
-Car ..|> Loadable
 Car ..|> Transportable
 Vehicle ..|> Movable
 Transporter ..|> Loader
 Transportable ..|> Loadable
 
 
-' Ferry uses LaneManager
-CarFerry --> LaneManager : lanes
 
-' Simulation owns rule handler and aggregates world objects
-Simulation --> WallCollisionHandler
-Simulation o-- Vehicle : vehicles
-Simulation o-- VehicleTransporter : transporters
-Simulation --> RepairShop : repairShop
+
+VehicleSimulation --> WallCollisionHandler
+VehicleSimulation --> Vehicle : vehicles
 
 ' GUI
 JFrame <|-- CarView
 JPanel <|-- DrawPanel
 
-CarController --> Simulation
-CarController --> CarView
-
-InputHandler --> CarController
-
 DrawPanel --> ImageHandler
 DrawPanel ..> Transportable : renders list
+
 
 CarView --> DrawPanel
 

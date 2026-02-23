@@ -19,7 +19,6 @@ public abstract class RampVehicle<T extends Transportable> extends Vehicle imple
     public boolean canLoad() {
         return !rampUp;} // Can't load if ramp is up, can if lowered
 
-
     @Override
     public void startEngine(){
                 if (rampUp) {setCurrentSpeed(0.1);}

@@ -17,7 +17,8 @@ public class VolkswagenUnicorn extends RampVehicle<Car> {
 
     @Override
     public double speedFactor() {
-        return getEnginePower() * 0.05;}
+        return getEnginePower() * 0.05;
+    }
 
     @Override
     public void load(Car carName) {
@@ -27,7 +28,7 @@ public class VolkswagenUnicorn extends RampVehicle<Car> {
         }
     }
 
-    private boolean isNear(Car carName){
+    private boolean isNear(Car carName) {
         return Math.abs(carName.getX() - getX()) <= 5 && Math.abs(carName.getY() - getY()) <= 5;
     }
 
@@ -37,13 +38,13 @@ public class VolkswagenUnicorn extends RampVehicle<Car> {
             Car car = cars.pop();
             car.setPosition(getX() - 5, getY() - 5);
             return car;
-        }
-        else return null;
+        } else return null;
     }
+
     @Override
     public void move() {
         super.move();
-        for (Car car : cars){
+        for (Car car : cars) {
             car.setPosition(getX(), getY());
         }
     }

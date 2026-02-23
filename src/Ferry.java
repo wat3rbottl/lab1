@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.List;
 
-public abstract class CarFerry extends RampVehicle<Car>  {
+public abstract class Ferry extends VehicleTransporter<Car>  {
     private final int capacityPerLane;
     private final int numLanes;
     private final List<Queue<Car>> lanes;
 
-    public CarFerry(int doors, double EnginePower, Color dye, String name, int capacityPerLane, int numLanes) {
+    public Ferry(int doors, double EnginePower, Color dye, String name, int capacityPerLane, int numLanes) {
         super(doors, EnginePower, dye, name);
         this.capacityPerLane = capacityPerLane;
         this.numLanes = numLanes;

@@ -1,184 +1,87 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
-import static java.lang.Math.abs;
-
-/*
- * This class represents the Controller part in the MVC pattern.
- * Its responsibilities are to listen to the View and respond in an appropriate manner by
- * modifying the model state and the updating the view.
- */
 
 public class CarController {
-    // member fields:
-
-    // The delay (ms) corresponds to 20 updates a sec (hz)
     private final int delay = 50;
-    // The timer is started with a listener (see below) that executes the statements
-    // each step between delays.
-    private Timer timer = new Timer(delay, new TimerListener());
+    private Timer timer;
+    private Simulation simulation;
+    private InputHandler input;
+    private CarView carView;
 
-
-    // The frame that represents this instance View of the MVC pattern
-    CarView frame;
-    // A list of cars, modify if needed
-    static ArrayList<Vehicle> vehicles = new ArrayList<>();
-    CarRepairShop<Volvo240> volvoRepair = new CarRepairShop<>(5,300,300);
-
-    private final ArrayList<Vehicle> toRemove = new ArrayList<>();
-
-    public static void main(String[] args) {
-        // Instance of this class
-        CarController cc = new CarController();
-
-        Volvo240 volvo = new Volvo240();
-        volvo.setPosition(0, 100);
-        vehicles.add(volvo);
-        Saab95 saab = new Saab95();
-        saab.setPosition(0, 200);
-        vehicles.add(saab);
-        Scania<?> scania = new Scania<>();
-        scania.setPosition(0, 300);
-        vehicles.add(scania);
-
-        // Start a new view and send a reference of self
-        cc.frame = new CarView("CarSim 1.0", cc);
-
-        // Start the timer
-        cc.timer.start();
+    public CarController(Simulation simulation) {
+        this.simulation = simulation;
+        this.timer = new Timer(delay, new TimerListener());
     }
 
-    /* Each step the TimerListener moves all the cars in the list and tells the
-     * view to update its images. Change this method to your needs.
-     * */
+    public void setView(CarView view){
+        this.carView = view;
+    }
+
+    public void initInput(){
+        this.input = new InputHandler(this);
+        input.setupKeyBindings(carView.getRootPane());
+        input.bindButtons(carView);
+    }
+
+    public void startTimer() {
+        timer.start();
+    }
+
+    public void stopTimer() {
+        timer.stop();
+    }
+
     private class TimerListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
-            for (Vehicle vehicle : vehicles) {
-
-                int x = (int) Math.round(vehicle.getX());
-                int y = (int) Math.round(vehicle.getY());
-
-                if (x >= 699 && vehicle.getDirection() == Vehicle.Direction.EAST) {
-                    vehicle.setDirection(Vehicle.Direction.WEST);
-                }
-                else if(x <= 1 && vehicle.getDirection() == Vehicle.Direction.WEST) {
-                    vehicle.setDirection(Vehicle.Direction.EAST);
-                }
-                if (y >= 500 && vehicle.getDirection() == Vehicle.Direction.NORTH) {
-                    vehicle.setDirection(Vehicle.Direction.SOUTH);
-                }
-                else if (y <= 1 && vehicle.getDirection() == Vehicle.Direction.SOUTH) {
-                        vehicle.setDirection(Vehicle.Direction.NORTH);
-                }
-
-                if(vehicle instanceof Volvo240 volvo) {
-                    if (abs(x - volvoRepair.getX()) < 10 && abs(y - volvoRepair.getY()) < 10 &&
-                            volvoRepair.numCars() < volvoRepair.getCapacity()) {
-                                volvoRepair.load(volvo);
-                                toRemove.add(volvo);
-                                continue;
-                    }
-                }
-
-                vehicle.move();
-
-                int newX = (int) Math.round(vehicle.getX());
-                int newY = (int) Math.round(vehicle.getY());
-
-                boolean flipped = (vehicle.getDirection() == Vehicle.Direction.WEST);
-
-                frame.drawPanel.moveit(vehicle, newX, newY, flipped);
-            }
-            frame.drawPanel.repaint();
-            vehicles.removeAll(toRemove);
-            toRemove.clear();
+            simulation.tick();
+            carView.repaint();
         }
     }
 
-    // Calls the gas method for each car once
-    void gas(int amount) {
-        double gas = ((double) amount) / 100;
-        for (Vehicle vehicle : vehicles
-        ) {
-            vehicle.gas(gas);
-        }
+    void gas(double amount) {
+        simulation.gasAll((double) amount / 100);
     }
 
-    void brake(int amount) {
-        double brake = ((double) amount) / 100;
-        for (Vehicle vehicle : vehicles) {
-            vehicle.brake(brake);
-
-        }
+    void brake(double amount) {
+        simulation.brakeAll((double) amount / 100);
     }
 
     void startEngine() {
-        for (Vehicle vehicle : vehicles) {
-            vehicle.startEngine();
-        }
+        simulation.startAll();
     }
 
     void stopEngine() {
-        for (Vehicle vehicle : vehicles) {
-            vehicle.stopEngine();
-        }
+        simulation.stopAll();
     }
 
     void turnRight() {
-        for (Vehicle vehicle : vehicles) {
-            vehicle.turnRight();
-        }
+        simulation.turnRightAll();
     }
 
     void turnLeft() {
-        for (Vehicle vehicle : vehicles) {
-            vehicle.turnLeft();
-        }
+        simulation.turnLeftAll();
     }
 
     void up() {
-        for (Vehicle vehicle : vehicles) {
-            vehicle.down();                 // Because y axis is inverted in the car sim
-        }
+        simulation.upAllInvertedY();
     }
 
     void down() {
-        for (Vehicle vehicle : vehicles) {
-            vehicle.up();                   // Because y axis is inverted in the car sim
-        }
+        simulation.downAllInvertedY();
     }
 
     void turboOn() {
-        for (Vehicle vehicle : vehicles) {
-            if (vehicle instanceof Saab95 saab) {
-                saab.setTurboOn();
-            }
-        }
     }
 
-    void turboOff(){
-        for (Vehicle vehicle : vehicles) {
-            if (vehicle instanceof Saab95 saab) {
-                saab.setTurboOff();
-            }
-        }
+    void turboOff() {
     }
 
-    void lowerBed(){
-        for (Vehicle vehicle : vehicles) {
-            if (vehicle instanceof Scania scania) {
-                scania.lower();
-            }
-        }
+    void lowerBed() {
     }
-    void raiseBed(){
-        for (Vehicle vehicle : vehicles) {
-            if (vehicle instanceof Scania scania) {
-                scania.raise();
-            }
-        }
+
+    void raiseBed() {
     }
 }
 

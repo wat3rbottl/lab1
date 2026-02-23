@@ -1,12 +1,12 @@
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Scania<T extends Transportable> extends RampVehicle<T> {
+public class Scania<T extends Transportable> extends VehicleTransporter<T> {
     private int rampDeg = 0;
     private ArrayList<T> items = new ArrayList<>();
 
     public Scania() {
-        super(2,150, Color.pink, "Scania Fire");
+        super(2,150, Color.pink, "Scania");
     }
 
     @Override

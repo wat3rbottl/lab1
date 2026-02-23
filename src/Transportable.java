@@ -1,2 +1,2 @@
-public interface Transportable {
+public interface Transportable extends Loadable{
 }
