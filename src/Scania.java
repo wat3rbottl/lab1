@@ -11,7 +11,7 @@ public class Scania<T extends Transportable> extends Vehicle implements Transpor
 
     @Override
     public double speedFactor() {
-        return getEnginePower() * 0.03;
+        return getEnginePower() * 0.02;
     }
 
     @Override

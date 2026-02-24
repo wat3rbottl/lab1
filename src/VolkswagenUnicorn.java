@@ -19,7 +19,7 @@ public class VolkswagenUnicorn extends VehicleTransporter<Car> implements Rampab
 
     @Override
     public double speedFactor() {
-        return getEnginePower() * 0.04;
+        return getEnginePower() * 0.02;
     }
 
     @Override
