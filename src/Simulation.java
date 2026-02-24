@@ -6,30 +6,66 @@ public class Simulation {
 
     private final List<Vehicle> vehicles;
     private final WallCollisionHandler wall;
-    private final WorkShopCollisionHandler workshopCollisionHandler = new WorkShopCollisionHandler(10);
-    private final List<WorkShop<? extends Car>> workShops = new ArrayList<>();
+    private final WorkShopCollisionHandler workshopCollision;
+    private final List<WorkShop<? extends Car>> workShops;
 
-    public Simulation(List<Vehicle> vehicles, WallCollisionHandler wall/*, WorkshopCollisionHandler workshop*/) {
+    public Simulation(List<Vehicle> vehicles, List<WorkShop<? extends Car>> workShops, WallCollisionHandler wall, WorkShopCollisionHandler workshopCollision) {
         this.vehicles = vehicles;
         this.wall = wall;
-//      this.workshop = workshop;
+        this.workshopCollision = workshopCollision;
+        this.workShops = workShops;
     }
 
-    public void addWorkShop(WorkShop<? extends Car> shop) { workShops.add(shop); }
-
-    public List<WorkShop<? extends Car>> getWorkShops() { return workShops; }
+    public List<WorkShop<? extends Car>> getWorkShops() {
+        return workShops;
+    }
 
     public List<Vehicle> getVehicles() {
         return vehicles;
     }
 
-    public void tick() {
+    public boolean tick() {
         for (Vehicle v : vehicles) {
             wall.handle(v);
             v.move();
         }
-        List<Vehicle> toRemove = workshopCollisionHandler.handle(vehicles, workShops);
+        List<Vehicle> toRemove = workshopCollision.handle(vehicles, workShops);
         vehicles.removeAll(toRemove);
+
+        return true;
+    }
+
+    public List<RenderItem> getRenderItems() {
+        List<RenderItem> items = new ArrayList<>();
+
+        for (Vehicle v : vehicles) {
+            int x = (int) Math.round(v.getX());
+            int y = (int) Math.round(v.getY());
+            boolean flipX = (v.getDirection() == Vehicle.Direction.WEST);
+            String imageId = v.getClass().getSimpleName();
+
+            items.add(new RenderItem(imageId, x, y, flipX));
+        }
+
+        for (WorkShop<? extends Car> ws : workShops) {
+            int x = (int) Math.round(ws.getX());
+            int y = (int) Math.round(ws.getY());
+            Class<?> type = ws.getAcceptedType();
+            String imageId = (type == Car.class)
+                    ? "GeneralShop"
+                    : type.getSimpleName() + "Shop";
+
+            //String imageId;
+            //if (type == Car.class) {
+            //    imageId = "GeneralShop";
+            //} else {
+            //    imageId = type.getSimpleName() + "Shop";
+            //}
+
+            items.add(new RenderItem(imageId, x, y, false));
+        }
+
+        return items;
     }
 
     // “All cars”-actions:
@@ -65,6 +101,7 @@ public class Simulation {
         for (Vehicle v : vehicles) v.down();
     }
 
+    // instance of ...
     public void turboOn() {
         for (Vehicle v : vehicles) {
             if (v instanceof Saab95) {
@@ -93,5 +130,20 @@ public class Simulation {
         }
     }
 
+    // Unload methods
+    public boolean unloadCarFromShopRandom() {
+        for (WorkShop<? extends Car> ws : workShops) {
+            if (ws.canUnload()) {
+                Car car = ws.unload();
+
+                double spawnPoint = 80;
+                car.setPosition(car.getX(), car.getY() - spawnPoint);
+                car.stopEngine();
+                vehicles.add(car);
+                return true;
+            }
+        }
+        return false;
+    }
 }
 

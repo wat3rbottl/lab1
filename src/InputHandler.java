@@ -65,5 +65,7 @@ public class InputHandler {
         view.getStopButton().addActionListener(e -> cc.stopEngine());
         view.getTurboOffButton().addActionListener(e -> cc.turboOff());
         view.getTurboOnButton().addActionListener(e -> cc.turboOn());
+        view.getUnloadButton().addActionListener(e -> cc.unloadCarFromShopRandom());
+
     }
 }

@@ -9,13 +9,11 @@ public class WorkShop<T extends Car> implements HasPosition, Loader<T> {
 
     private double x;
     private double y;
-    private final String imageId;
 
-    public WorkShop(int capacity, double x, double y, String imageId, Class<T> acceptedType) {
+    public WorkShop(int capacity, double x, double y, Class<T> acceptedType) {
         this.x = x;
         this.y = y;
         this.capacity = capacity;
-        this.imageId = imageId;
         this.acceptedType = acceptedType;
     }
 
@@ -76,30 +74,13 @@ public class WorkShop<T extends Car> implements HasPosition, Loader<T> {
         if (!hasSpace()) return false;
         if (!accepts(car)) return false;
 
-        // safe cast using the class token
-        T accepted = acceptedType.cast(car);
-        load(accepted);
+        T acceptedCar = acceptedType.cast(car);
+        load(acceptedCar);
 
-        System.out.println("Loaded " + car.getImageId() + " into " + imageId);
+        System.out.println("Loaded " + car.getClass().getSimpleName() + " into " + getAcceptedType()+"Shop");
 
         return true;
     }
-
-// Används ej, men tanken var att man skulle kunna hämta ut
-// specifik bil m.h.a. customerIndex (nummerlapp typ)
-// ---------------------------------------------------------------------------------
-//    public int newCustomerIndex() {
-//        return cars.size();
-//    }
-//
-//    public Vehicle returnVehicle(int index) {
-//        return cars.remove(index);
-//    }
-
-    public String getImageId() {
-        return imageId;
-    }
-
 }
 
 

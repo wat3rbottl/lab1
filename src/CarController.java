@@ -35,8 +35,11 @@ public class CarController {
     private class TimerListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            simulation.tick();
-            carView.repaint();
+            if (simulation.tick()) {
+
+                carView.getDrawPanel().setRenderItems(simulation.getRenderItems());
+                carView.repaint();
+            }
         }
     }
 
@@ -87,5 +90,10 @@ public class CarController {
     void raiseBed() {
         simulation.raiseBed();
     }
+
+    public void unloadCarFromShopRandom() {
+        simulation.unloadCarFromShopRandom();
+    }
+
 }
 

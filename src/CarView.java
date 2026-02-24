@@ -24,12 +24,13 @@ public class CarView extends JFrame {
     // Buttons
     private final JButton gasButton = new JButton("Gas");
     private final JButton brakeButton = new JButton("Brake");
-    private final JButton turboOnButton = new JButton("Saab Turbo on");
-    private final JButton turboOffButton = new JButton("Saab Turbo off");
+    private final JButton turboOnButton = new JButton("Turbo+");
+    private final JButton turboOffButton = new JButton("Turbo-");
     private final JButton liftBedButton = new JButton("Raise Bed");
     private final JButton lowerBedButton = new JButton("Lower Bed");
-    private final JButton startButton = new JButton("Start all cars");
-    private final JButton stopButton = new JButton("Stop all cars");
+    private final JButton startButton = new JButton("Start all");
+    private final JButton stopButton = new JButton("Stop all");
+    private final JButton unloadButton = new JButton("Unload car");
 
     // Constructor
     public CarView(String frameName, ImageHandler imageHandler) {
@@ -44,56 +45,78 @@ public class CarView extends JFrame {
         initComponents(frameName);
     }
 
-    public void setVehicles(List<Vehicle> vehicles) {
-        drawPanel.setVehicles(vehicles);
-    }
-
     private void initComponents(String title) {
+        Font f = gasButton.getFont().deriveFont(10f);
+        for (JButton b : List.of(gasButton, brakeButton, turboOnButton, turboOffButton, liftBedButton, lowerBedButton, unloadButton)) {
+            b.setFont(f);
+        }
+
         setTitle(title);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        setLayout(new BorderLayout());
         setPreferredSize(new Dimension(X, Y));
-        setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
-        add(drawPanel);
+        // CENTER: world
+        add(drawPanel, BorderLayout.CENTER);
 
-        // Gas panel
+        // SOUTH: controls
+        JPanel south = new JPanel(new BorderLayout(10, 10));
+        south.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        south.setPreferredSize(new Dimension(X, 170)); // styr höjden på kontrollfältet
+
+        // LEFT: spinners (2 rader, så de aldrig klipps)
+        JPanel spinnerPanel = new JPanel(new GridLayout(2, 1, 0, 8));
+
         gasPanel.setLayout(new BorderLayout());
-        gasPanel.add(gasLabel, BorderLayout.PAGE_START);
-        gasPanel.add(gasSpinner, BorderLayout.PAGE_END);
-        add(gasPanel);
+        gasPanel.add(gasLabel, BorderLayout.NORTH);
+        gasPanel.add(gasSpinner, BorderLayout.SOUTH);
 
-        // Brake panel
         brakePanel.setLayout(new BorderLayout());
-        brakePanel.add(brakeLabel, BorderLayout.PAGE_START);
-        brakePanel.add(brakeSpinner, BorderLayout.PAGE_END);
-        add(brakePanel);
+        brakePanel.add(brakeLabel, BorderLayout.NORTH);
+        brakePanel.add(brakeSpinner, BorderLayout.SOUTH);
 
-        // Control panel
-        controlPanel.setLayout(new GridLayout(2, 4));
-        controlPanel.add(gasButton, 0);
-        controlPanel.add(turboOnButton, 1);
-        controlPanel.add(liftBedButton, 2);
-        controlPanel.add(brakeButton, 3);
-        controlPanel.add(turboOffButton, 4);
-        controlPanel.add(lowerBedButton, 5);
+        spinnerPanel.add(gasPanel);
+        spinnerPanel.add(brakePanel);
+        spinnerPanel.setPreferredSize(new Dimension(220, 150));
 
-        controlPanel.setPreferredSize(new Dimension((X / 2) + 4, 200));
+        south.add(spinnerPanel, BorderLayout.WEST);
+
+        // CENTER: knappar
+        controlPanel.removeAll();
+        controlPanel.setLayout(new GridLayout(2, 4, 8, 8));
+
+        controlPanel.add(gasButton);
+        controlPanel.add(brakeButton);
+        controlPanel.add(turboOnButton);
+        controlPanel.add(turboOffButton);
+        controlPanel.add(liftBedButton);
+        controlPanel.add(lowerBedButton);
+        controlPanel.add(unloadButton);
+        controlPanel.add(new JLabel("")); // fyll sista rutan
+
         controlPanel.setBackground(Color.pink);
-        add(controlPanel);
+        south.add(controlPanel, BorderLayout.CENTER);
 
+        // RIGHT: start/stop (ta bort monster-storlekar)
         startButton.setBackground(Color.blue);
         startButton.setForeground(Color.pink);
-        startButton.setPreferredSize(new Dimension(X / 5 - 15, 200));
-        add(startButton);
 
         stopButton.setBackground(Color.WHITE);
         stopButton.setForeground(Color.pink);
-        stopButton.setPreferredSize(new Dimension(X / 5 - 15, 200));
-        add(stopButton);
+
+        JPanel startStopPanel = new JPanel(new GridLayout(2, 1, 0, 8));
+        startStopPanel.setPreferredSize(new Dimension(170, 150));
+        startStopPanel.add(startButton);
+        startStopPanel.add(stopButton);
+
+        south.add(startStopPanel, BorderLayout.EAST);
+
+        add(south, BorderLayout.SOUTH);
 
         pack();
         centerOnScreen();
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private void centerOnScreen() {
@@ -148,5 +171,9 @@ public class CarView extends JFrame {
 
     public JButton getStopButton() {
         return stopButton;
+    }
+
+    public JButton getUnloadButton() {
+        return unloadButton;
     }
 }

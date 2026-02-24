@@ -1,0 +1,151 @@
+@startuml
+skinparam classAttributeIconSize 0
+title Updaterad UML
+
+' =========================
+' INTERFACES
+' =========================
+interface HasPosition {
+  +getX(): double
+  +getY(): double
+  +setPosition(x:double,y:double)
+  +isNear(other:HasPosition, distance:double): boolean
+}
+
+interface Movable extends HasPosition {
+  +move()
+  +turnLeft()
+  +turnRight()
+}
+
+interface Transportable extends HasPosition
+
+interface Loader<T extends Transportable> {
+  +canLoad(item:T): boolean
+  +canUnload(): boolean
+  +load(item:T): void
+  +unload(): T
+}
+
+interface Transporter<T extends Transportable> extends Loader<T>{
+}
+
+interface Turboable {
+  +turboOn()
+  +turboOff()
+}
+
+interface Rampable {
+  +bedIsDown(): boolean
+  +bedIsUp(): boolean
+  +lowerBed()
+  +raiseBed()
+}
+
+' =========================
+' MODEL CLASSES
+' =========================
+abstract class Vehicle implements Movable {
+  -nrDoors:int
+  -enginePower:double
+  -color:Color
+  -modelName:String
+  -currentSpeed:double
+  -x:double
+  -y:double
+  -direction:Direction {NORTH,SOUTH,EAST,WEST}
+  +startEngine()
+  +stopEngine()
+  +gas(amount)
+  +brake(amount)
+  +move()
+  +up()
+  +down()
+  +turnLeft()
+  +turnRight()
+  +speedFactor():double (abstract)
+  +getImageId():String
+}
+
+abstract class Car extends Vehicle implements Transportable{
+}
+
+abstract class VehicleTransporter<T extends Car> extends Vehicle implements Transporter<T>{
+}
+
+class Volvo240 extends Car{
+}
+class Saab95 extends Car implements Turboable{
+}
+class Scania<T extends Transportable> extends Vehicle implements Transporter<T>{
+}
+class VolkswagenUnicorn extends VehicleTransporter<Car> implements Rampable{
+}
+
+class Workshop<T extends Car> implements HasPosition, Loader<T> {
+  -capacity:int
+  -stored:List<T>
+  -acceptedType:Class<T>
+  -x:double
+  -y:double
+  -imageId:String
+  +tryLoad(car:Car): boolean      ' uses acceptedType.isInstance + cast
+  +accepts(car:Car): boolean
+  +unload(): T                    ' typed return
+  +load(item:T): void             ' compile-time safe
+}
+
+class Simulation {
+  -vehicles: List<Vehicle>
+  -wall: WallCollisionHandler
+  -workshops: List<Workshop<? extends Car>>
+  -workshopHandler: WorkshopCollisionHandler
+
+  +tick()
+  +gasAll(amount)
+  +brakeAll(amount)
+  +startAll()
+  +stopAll()
+  +turnLeftAll()
+  +turnRightAll()
+  +upAll()
+  +downAll()
+
+  +turboOnAll()
+  +turboOffAll()
+  +raiseBedAll()
+  +lowerBedAll()
+
+  +addWorkshop(ws)
+  +getWorkshops()
+
+  +unloadOneFromAnyWorkshop(): boolean
+}
+
+' =========================
+' VIEW
+' =========================
+class CarView extends JFrame{
+  - initComponents(title) : void
+  - centerOnScreen() : void
+
+  + getDrawPanel() : DrawPanel
+
+}
+
+class DrawPanel extends JPanel{
+
+}
+
+class ImageHandler{}
+
+' =========================
+' CONTROLLER
+' =========================
+class CarController{
+
+}
+
+Rampable <|-- Scania
+
+@enduml

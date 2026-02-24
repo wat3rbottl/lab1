@@ -10,7 +10,7 @@ public class VolkswagenUnicorn extends VehicleTransporter<Car> implements Rampab
     private boolean rampUp = true;
 
     public VolkswagenUnicorn() {
-        super(2, 500, Color.pink, "VolkswagenUnicorn");
+        super(2, 200, Color.pink, "VolkswagenUnicorn");
     }
 
     public int getAmountOfCars() {
@@ -49,7 +49,7 @@ public class VolkswagenUnicorn extends VehicleTransporter<Car> implements Rampab
 
     @Override
     public void startEngine() {
-        if (rampUp) setCurrentSpeed(0.1);
+        if (rampUp && getCurrentSpeed() == 0) setCurrentSpeed(0.1);
     }
 
     @Override

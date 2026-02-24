@@ -16,7 +16,7 @@ public class Scania<T extends Transportable> extends Vehicle implements Transpor
 
     @Override
     public void startEngine() {
-        if (bedIsUp()) {
+        if (bedIsUp()&&getCurrentSpeed()==0) {
             setCurrentSpeed(0.1);
         }
     }
