@@ -56,15 +56,6 @@ public class InputHandler {
 
     // Binding clickable buttons
     public void bindButtons(CarView view) {
-//        view.getGasSpinner().addChangeListener(new ChangeListener() {
-//            @Override
-//            public void stateChanged(ChangeEvent e) {
-//                view.getGasAmount();
-//                view.getBrakeAmount();
-//                gasAmount = (int) ((JSpinner) e.getSource()).getValue();
-//                brakeAmount = (int) ((JSpinner) e.getSource()).getValue();
-//            }
-//        });
 
         view.getGasButton().addActionListener(e -> cc.gas(view.getGasAmount()));
         view.getBrakeButton().addActionListener(e -> cc.brake(view.getBrakeAmount()));

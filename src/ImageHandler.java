@@ -11,8 +11,10 @@ public class ImageHandler {
         add("Volvo240", "/pics/Volvo240.jpg");
         add("Saab95", "/pics/Saab95.jpg");
         add("Scania", "/pics/Scania.jpg");
-        add("VolkswagenUnicorn",  "/pics/VolkswagenUnicorn.jpg");
-        add("Saab", "/pics/Saab.jpg");
+        add("VolkswagenUnicorn", "/pics/VolkswagenUnicorn.jpg");
+        add("Saab95Shop", "/pics/Saab95Shop.jpg");
+        add("Volvo240Shop",  "/pics/Volvo240Shop.jpg");
+        add("GeneralShop",  "/pics/GeneralShop.jpg");
     }
 
     public void add(String imageID, String imagePath) {

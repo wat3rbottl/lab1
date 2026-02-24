@@ -20,11 +20,17 @@ public class WallCollisionHandler {
         } else if (x <= minX && v.getDirection() == Vehicle.Direction.WEST) {
             v.setDirection(Vehicle.Direction.EAST);
         }
-        if (y >= maxY && v.getDirection() == Vehicle.Direction.NORTH) {
-            v.setDirection(Vehicle.Direction.SOUTH);
-        } else if (y <= minY && v.getDirection() == Vehicle.Direction.SOUTH) {
+        if (y >= maxY && v.getDirection() == Vehicle.Direction.SOUTH) {
             v.setDirection(Vehicle.Direction.NORTH);
+        } else if (y <= minY && v.getDirection() == Vehicle.Direction.NORTH) {
+            v.setDirection(Vehicle.Direction.SOUTH);
         }
+
+        v.setPosition(
+                Math.max(minX, Math.min(maxX, v.getX())),
+                Math.max(minY, Math.min(maxY, v.getY()))
+        );      // make sure car doesn't get stuck out of bounds
+
     }
 }
 

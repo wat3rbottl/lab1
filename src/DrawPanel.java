@@ -7,7 +7,7 @@ public class DrawPanel extends JPanel {
 
     private final ImageHandler imageHandler;
     private List<Vehicle> vehicles = List.of();
-    private List<RepairShop> repairShops = List.of();
+    private List<WorkShop<? extends Car>> WorkShops = List.of();
 
     //Initializes the panel
     public DrawPanel(int width, int height, ImageHandler imageHandler) {
@@ -22,8 +22,8 @@ public class DrawPanel extends JPanel {
         this.vehicles = vehicles;
     }
 
-    public void setRepairShops(List<RepairShop> repairShops) {
-        this.repairShops = repairShops;
+    public void setWorkShops(List<WorkShop<? extends Car>> WorkShops) {
+        this.WorkShops = WorkShops;
     }
 
     @Override
@@ -46,14 +46,13 @@ public class DrawPanel extends JPanel {
             }
         }
 
-        for (RepairShop rs : repairShops) {
-            BufferedImage img = imageHandler.get(rs.getImageId());
+        for (WorkShop ws : WorkShops) {
+            BufferedImage img = imageHandler.get(ws.getImageId());
             if (img == null) {
-                continue;
             } // Fixa nån nödlösning, typ rita leksaksbil eller nåt.
-
-            int x = (int) Math.round(rs.getX());
-            int y = (int) Math.round(rs.getY());
+            int x = (int) Math.round(ws.getX());
+            int y = (int) Math.round(ws.getY());
+            g.drawImage(img, x, y, null);
 
         }
     }

@@ -1,9 +1,11 @@
 public interface Rampable {
 
-    boolean atMax();
-    boolean atMin();
+    boolean bedIsDown();
 
-    default void lower(){}
-    default void raise(){}
+    boolean bedIsUp();
+
+    void lowerBed();
+
+    void raiseBed();
 
 }

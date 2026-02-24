@@ -6,7 +6,7 @@ import java.util.List;
 public class CarView extends JFrame {
     private static final int X = 800;
     private static final int Y = 800;
-    private static final int Y_LIMIT = 800-240;
+    private static final int Y_LIMIT = 800 - 240;
 
     DrawPanel drawPanel;
     JPanel controlPanel = new JPanel();
@@ -26,8 +26,8 @@ public class CarView extends JFrame {
     private final JButton brakeButton = new JButton("Brake");
     private final JButton turboOnButton = new JButton("Saab Turbo on");
     private final JButton turboOffButton = new JButton("Saab Turbo off");
-    private final JButton liftBedButton = new JButton("Raise Lift Bed");
-    private final JButton lowerBedButton = new JButton("Lower Lift Bed");
+    private final JButton liftBedButton = new JButton("Raise Bed");
+    private final JButton lowerBedButton = new JButton("Lower Bed");
     private final JButton startButton = new JButton("Start all cars");
     private final JButton stopButton = new JButton("Stop all cars");
 
@@ -107,7 +107,10 @@ public class CarView extends JFrame {
     }
 
     public int getGasAmount() {
-        try { gasSpinner.commitEdit(); } catch (java.text.ParseException ignored) {}
+        try {
+            gasSpinner.commitEdit();
+        } catch (java.text.ParseException ignored) {
+        }
         return (int) gasSpinner.getValue();
     }
 
@@ -145,13 +148,5 @@ public class CarView extends JFrame {
 
     public JButton getStopButton() {
         return stopButton;
-    }
-
-    public JSpinner getGasSpinner(){
-        return gasSpinner;
-    }
-
-    public JSpinner getBrakeSpinner(){
-        return brakeSpinner;
     }
 }

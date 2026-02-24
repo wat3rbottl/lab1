@@ -1,6 +1,8 @@
-public interface Loader<T extends Loadable> extends HasPosition {
+public interface Loader<T extends Transportable> {
 
     boolean canLoad(T item);
+
+    boolean canUnload();
 
     void load(T item);
 

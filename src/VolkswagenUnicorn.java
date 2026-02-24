@@ -3,12 +3,14 @@ import java.awt.*;
 import java.util.Stack;
 
 
-public class VolkswagenUnicorn extends RampVehicle<Car> {
+public class VolkswagenUnicorn extends VehicleTransporter<Car> implements Rampable {
     private final Stack<Car> cars = new Stack<Car>(); //Stores cars loaded in order LIFO
     private final int capacity = 20;
 
+    private boolean rampUp = true;
+
     public VolkswagenUnicorn() {
-        super(2, 500, Color.pink, "Volkswagen Unicorn");
+        super(2, 500, Color.pink, "VolkswagenUnicorn");
     }
 
     public int getAmountOfCars() {
@@ -17,36 +19,74 @@ public class VolkswagenUnicorn extends RampVehicle<Car> {
 
     @Override
     public double speedFactor() {
-        return getEnginePower() * 0.05;
+        return getEnginePower() * 0.04;
     }
 
     @Override
-    public void load(Car carName) {
-        if (canLoad() && isNear(carName) && cars.size() < capacity) {
-            carName.setPosition(getX(), getY());
-            cars.push(carName);
-        }
+    protected Iterable<Car> getLoadedItems() {
+        return cars;
     }
 
-    private boolean isNear(Car carName) {
-        return Math.abs(carName.getX() - getX()) <= 5 && Math.abs(carName.getY() - getY()) <= 5;
+    @Override
+    public boolean bedIsUp() {
+        return rampUp;
+    }
+
+    @Override
+    public boolean bedIsDown() {
+        return !rampUp;
+    }
+
+    @Override
+    public void raiseBed() {
+        rampUp = true;
+    }
+
+    @Override
+    public void lowerBed() {
+        if (getCurrentSpeed() == 0) rampUp = false;
+    }
+
+    @Override
+    public void startEngine() {
+        if (rampUp) setCurrentSpeed(0.1);
+    }
+
+    @Override
+    public void gas(double amount) {
+        if (rampUp) super.gas(amount);
+    }
+
+
+    @Override
+    public boolean canLoad(Car car) {
+        return bedIsDown()
+                && super.canLoad(car)
+                && cars.size() < capacity;
+    }
+
+    @Override
+    public void load(Car car) {
+        if (!canLoad(car)) return;
+        car.setPosition(getX(), getY());
+        cars.push(car);
+    }
+
+    @Override
+    public boolean canUnload() {
+        return bedIsDown()
+                && super.canUnload()        // speed==0
+                && !cars.isEmpty();
     }
 
     @Override
     public Car unload() {
-        if (canLoad() && !cars.isEmpty()) {
-            Car car = cars.pop();
-            car.setPosition(getX() - 5, getY() - 5);
-            return car;
-        } else return null;
-    }
-
-    @Override
-    public void move() {
-        super.move();
-        for (Car car : cars) {
-            car.setPosition(getX(), getY());
-        }
+        if (!canUnload()) return null;
+        Car car = cars.pop();
+        car.setPosition(getX() - 5, getY() - 5);
+        return car;
     }
 
 }
+
+

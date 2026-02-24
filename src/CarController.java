@@ -14,11 +14,11 @@ public class CarController {
         this.timer = new Timer(delay, new TimerListener());
     }
 
-    public void setView(CarView view){
+    public void setView(CarView view) {
         this.carView = view;
     }
 
-    public void initInput(){
+    public void initInput() {
         this.input = new InputHandler(this);
         input.setupKeyBindings(carView.getRootPane());
         input.bindButtons(carView);
@@ -65,23 +65,27 @@ public class CarController {
     }
 
     void up() {
-        simulation.upAllInvertedY();
+        simulation.upAll();
     }
 
     void down() {
-        simulation.downAllInvertedY();
+        simulation.downAll();
     }
 
     void turboOn() {
+        simulation.turboOn();
     }
 
     void turboOff() {
+        simulation.turboOff();
     }
 
     void lowerBed() {
+        simulation.lowerBed();
     }
 
     void raiseBed() {
+        simulation.raiseBed();
     }
 }
 
