@@ -1,24 +1,34 @@
 @startuml
 skinparam classAttributeIconSize 0
-title Updaterad UML
+title Updated UML (Refactored 2.0)
 
 ' =========================
 ' INTERFACES
 ' =========================
 interface HasPosition {
-  +getX(): double
-  +getY(): double
-  +setPosition(x:double,y:double)
-  +isNear(other:HasPosition, distance:double): boolean
+    +getX: double
+    +getY: double
+    +setPosition:
+    +isNear: boolean
 }
 
 interface Movable extends HasPosition {
-  +move()
-  +turnLeft()
-  +turnRight()
+    +move():
+    +turnLeft():
+    +turnRight():
 }
 
-interface Transportable extends HasPosition
+interface VehicleComponent extends Movable{
+    +gas():
+    +brake():
+    +startEngine():
+    +stopEngine():
+    +move():
+    +turnLeft():
+    +turnRight():
+    }
+
+interface Transportable extends HasPosition{}
 
 interface Loader<T extends Transportable> {
   +canLoad(item:T): boolean
@@ -45,7 +55,11 @@ interface Rampable {
 ' =========================
 ' MODEL CLASSES
 ' =========================
-abstract class Vehicle implements Movable {
+class App{
+    +main
+}
+
+abstract class Vehicle implements VehicleComponent {
   -nrDoors:int
   -enginePower:double
   -color:Color
@@ -64,7 +78,9 @@ abstract class Vehicle implements Movable {
   +turnLeft()
   +turnRight()
   +speedFactor():double (abstract)
-  +getImageId():String
+}
+
+abstract class Ferry extends VehicleTransporter<Car>{
 }
 
 abstract class Car extends Vehicle implements Transportable{
@@ -88,7 +104,6 @@ class Workshop<T extends Car> implements HasPosition, Loader<T> {
   -acceptedType:Class<T>
   -x:double
   -y:double
-  -imageId:String
   +tryLoad(car:Car): boolean      ' uses acceptedType.isInstance + cast
   +accepts(car:Car): boolean
   +unload(): T                    ' typed return
@@ -121,6 +136,24 @@ class Simulation {
 
   +unloadOneFromAnyWorkshop(): boolean
 }
+abstract class VehicleFactory{
+    -registry: Map<VehicleType>, Supplier<Vehicle>
+    + createVehicle(type: VehicleType): Vehicle
+}
+
+enum VehicleType{
+    Volvo240
+    Saab95
+    Scania
+    VolkswagenUnicorn
+    Ferry
+    }
+
+
+class WorkShopFactory{
+    +createWorkShop(capacity, Class<T> type): WorkShop<>
+    }
+
 
 ' =========================
 ' VIEW
@@ -137,7 +170,9 @@ class DrawPanel extends JPanel{
 
 }
 
-class ImageHandler{}
+
+class ImageHandler{
+
 
 ' =========================
 ' CONTROLLER
@@ -145,6 +180,8 @@ class ImageHandler{}
 class CarController{
 
 }
+
+class InputHandler{}
 
 Rampable <|-- Scania
 
