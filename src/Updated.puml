@@ -28,7 +28,8 @@ interface VehicleComponent extends Movable{
     +turnRight():
     }
 
-interface Transportable extends HasPosition{}
+interface Transportable extends HasPosition{
+}
 
 interface Loader<T extends Transportable> {
   +canLoad(item:T): boolean
@@ -57,7 +58,12 @@ interface Rampable {
 ' =========================
 class App{
     +main
+    +vehicles: List
+    +workshops: List
 }
+'Creates new simulation, view, controller
+'Should only know about factories and vehiclecomponent!!!
+
 
 abstract class Vehicle implements VehicleComponent {
   -nrDoors:int
@@ -104,10 +110,10 @@ class Workshop<T extends Car> implements HasPosition, Loader<T> {
   -acceptedType:Class<T>
   -x:double
   -y:double
-  +tryLoad(car:Car): boolean      ' uses acceptedType.isInstance + cast
+  +tryLoad(car:Car): boolean
   +accepts(car:Car): boolean
-  +unload(): T                    ' typed return
-  +load(item:T): void             ' compile-time safe
+  +unload(): T
+  +load(item:T): void
 }
 
 class Simulation {
@@ -140,6 +146,8 @@ abstract class VehicleFactory{
     -registry: Map<VehicleType>, Supplier<Vehicle>
     + createVehicle(type: VehicleType): Vehicle
 }
+' Creates vehicle
+
 
 enum VehicleType{
     Volvo240
@@ -172,16 +180,44 @@ class DrawPanel extends JPanel{
 
 
 class ImageHandler{
+  + getImageKey(Obj : object) : String
+  + isFlipped(Obj : object) : boolean
+  }
 
 
 ' =========================
 ' CONTROLLER
 ' =========================
 class CarController{
+  - simulation : Simulation
+  - input : InputHandler
+  - view : CarView
 
 }
 
-class InputHandler{}
+class InputHandler{
+  - controller : CarController
+  + bindKeyboard(component: JComponent)
+  + bindButtons(view: CarView)
+}
+
+'===========================================
+' BEROENDEN
+'===========================================
+
+'===========================================
+'ASSOCIATIONER
+'===========================================
+
+'===========================================
+'ASSOCIATIONER
+'===========================================
+
+'===========================================
+'ASSOCIATIONER
+'===========================================
+
+
 
 Rampable <|-- Scania
 

@@ -1,5 +1,15 @@
-public interface VehicleFactory {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
-    Vehicle createVehicle();
+abstract class VehicleFactory {
+    Map<VehicleType, Supplier<Vehicle>> vehicleMap= new HashMap<>();
+
+    Vehicle createVehicle() {
+        return new Vehicle() {
+
+        }
+        };
+    }
 
 }

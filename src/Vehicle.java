@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public abstract class Vehicle implements Movable {
+public abstract class Vehicle implements VehicleComponent {
     private int nrDoors; // Number of doors on the car
     private double enginePower; // Engine power of the car, protected because subclasses need to access it
     private Color color; // Color of the car
@@ -83,6 +83,7 @@ public abstract class Vehicle implements Movable {
         }
     }
 
+    @Override
     public void stopEngine() {
         currentSpeed = 0;
     }
@@ -131,12 +132,14 @@ public abstract class Vehicle implements Movable {
         direction = Direction.SOUTH;
     }
 
+    @Override
     public void gas(double amount) {
         if (0 <= amount && amount <= 1 && getCurrentSpeed() > 0) {
             incrementSpeed(amount);
         }
     }
 
+    @Override
     public void brake(double amount) {
         if (0 <= amount && amount <= 1) {
             decrementSpeed(amount);
