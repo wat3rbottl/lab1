@@ -1,0 +1,223 @@
+@startuml
+skinparam classAttributeIconSize 0
+title Refaktoriseringsplan
+
+' =========================
+' Core interfaces
+' =========================
+interface Movable {
+  + move() : void
+  + turnRight() : void
+  + turnLeft() : void
+}
+
+interface Loadable{
+  + isLoaded() : boolean
+}
+
+interface Loader{
+  + load(item) : void
+  + unload()
+}
+
+interface Transportable  {
+  + getPosition() : Position
+  + setPosition(p: Position)
+}
+
+interface Transporter  {
+  + updateLoadedPositions()
+}
+
+interface Turboable {
+  + setTurboOn()
+  + setTurboOff()
+}
+
+interface Ramp {
+   - atMax : boolean
+   - atMin : boolean
+   + lower(deg) : void
+   + lift(deg) : void
+   + canLoad() : boolean
+}
+
+' =========================
+' Decomposition: model.vehicle.Vehicle parts
+' =========================
+class Position {
+  - x : double
+  - y : double
+  + getX() : double
+  + getY() : double
+  + setX(x: double)
+  + setY(y: double)
+}
+
+class Engine {
+  - started : boolean
+  - enginePower : double
+  - currentSpeed : double
+  + start()
+  + stop()
+  + isStarted() : boolean
+  + getCurrentSpeed() : double
+  + setCurrentSpeed(v: double)
+}
+
+class SpeedModel {
+  + speedFactor() : double
+  + incrementSpeed(engine: Engine, amount: double)
+  + decrementSpeed(engine: Engine, amount: double)
+}
+
+enum Direction {
+  NORTH
+  SOUTH
+  EAST
+  WEST
+}
+
+' =========================
+' Domain model
+' =========================
+abstract class Vehicle {
+  - position : Position
+  - engine : Engine
+  - speedModel : SpeedModel
+  - direction : Direction
+  + getPosition() : Position
+  + setPosition(p: Position)
+  + getDirection() : Direction
+  + setDirection(d: Direction)
+  + startEngine()
+  + stopEngine()
+  + gas(amount: double)
+  + brake(amount: double)
+  + move()
+}
+
+abstract class Car
+
+class Volvo240
+class Saab95
+
+' Transporters
+abstract class CarTransporter
+class Scania
+class CarFerry
+class VolkswagenUnicorn
+
+class RepairShop
+
+class LaneManager {
+  + addToQueue(item)
+  + removeFromQueue()
+  + size() : int
+}
+
+' =========================
+' model.simulation.Simulation & rules
+' =========================
+class VehicleSimulation {
+  - vehicles : List
+}
+
+class WallCollisionHandler {
+  + handle(vehicle: Vehicle, bounds: Rectangle)
+}
+
+' =========================
+' GUI / MVC refactor
+' =========================
+class CarController {
+  - simulation : Simulation
+  - input : InputHandler
+  - view : CarView
+  + Gas(amount:int)
+  + Brake(amount:int)
+  + StartAll()
+  + StopAll()
+  + TurnLeft()
+  + TurnRight()
+  + Up()
+  + Down()
+  + TurboOn()
+  + TurboOff()
+}
+
+class InputHandler {
+  - controller : CarController
+  + bindKeyboard(component: JComponent)
+  + bindButtons(view: CarView)
+}
+
+class ImageHandler {
+  + getImageKey(Obj : object) : String
+  + isFlipped(Obj : object) : boolean
+}
+
+class DrawPanel {
+  - images : ImageHandler
+  - vehicles : List
+  + setVehicles(vehicles: List)
+  + paintComponent(g: Graphics)
+}
+
+class CarView
+
+' =========================
+' Relationships
+' =========================
+
+' Komposition
+Vehicle --> Position
+Vehicle --> Engine
+Vehicle --> SpeedModel
+Vehicle --> Direction
+CarController --> VehicleSimulation
+CarController --> CarView
+InputHandler <-- CarController
+
+
+
+' Generalisering
+Vehicle <|-- Car
+Car <|-- Volvo240
+Car <|-- Saab95
+Vehicle <|-- CarTransporter
+CarTransporter <|-- VolkswagenUnicorn
+CarTransporter <|-- CarFerry
+Vehicle <|-- Scania
+' model.vehicle.Ferry uses LaneManager
+CarFerry --> LaneManager
+
+
+' Realisering
+CarTransporter ..|> Transporter
+RepairShop ..|> Loader
+Saab95 ..|> Turboable
+Scania ..|> Ramp
+VolkswagenUnicorn ..|> Ramp
+Car ..|> Transportable
+Vehicle ..|> Movable
+Transporter ..|> Loader
+Transportable ..|> Loadable
+
+
+
+
+VehicleSimulation --> WallCollisionHandler
+VehicleSimulation --> Vehicle : vehicles
+
+' GUI
+JFrame <|-- CarView
+JPanel <|-- DrawPanel
+
+DrawPanel --> ImageHandler
+DrawPanel ..> Transportable : renders list
+
+
+CarView --> DrawPanel
+
+@enduml
