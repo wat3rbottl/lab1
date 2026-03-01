@@ -258,7 +258,7 @@ DrawPanel ..|> SimulationObserver
 '===========================================
 'En klass har fält som ansvarar av den
 Simulation <-- SimulationObserver
-CarController <-- InputHandler
+CarController --> InputHandler
 CarView <-- DrawPanel
 CarView <-- JPanel
 RenderItemMapper <-- RenderItem
