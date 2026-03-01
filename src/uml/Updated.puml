@@ -12,33 +12,25 @@ interface HasPosition {
     +isNear: boolean
 }
 
-interface Movable extends HasPosition {
+interface Movable  {
     +move():
     +turnLeft():
     +turnRight():
 }
 
-interface VehicleComponent extends Movable{
-    +gas():
-    +brake():
-    +startEngine():
-    +stopEngine():
-    +move():
-    +turnLeft():
-    +turnRight():
-    }
-
-interface Transportable extends HasPosition{
+interface Transportable {
 }
 
-interface Loader<T extends Transportable> {
+interface Loader<T> {
   +canLoad(item:T): boolean
   +canUnload(): boolean
   +load(item:T): void
   +unload(): T
 }
 
-interface Transporter<T extends Transportable> extends Loader<T>{
+interface Transporter<T extends Transportable> {
+    +getCapacity : MAX_VALUE
+    +getLoadCount : int
 }
 
 interface Turboable {
@@ -53,6 +45,10 @@ interface Rampable {
   +raiseBed()
 }
 
+interface SimulationObserver{
+    +onTick(items : List<RenderItem>)
+}
+
 ' =========================
 ' MODEL CLASSES
 ' =========================
@@ -65,64 +61,88 @@ class App{
 'Should only know about factories and vehiclecomponent!!!
 
 
-abstract class Vehicle implements VehicleComponent {
-  -nrDoors:int
-  -enginePower:double
-  -color:Color
-  -modelName:String
-  -currentSpeed:double
-  -x:double
-  -y:double
-  -direction:Direction {NORTH,SOUTH,EAST,WEST}
+abstract class Vehicle  {
+  - position : Position
+  - engine : Engine
+  - speedModel : SpeedModel
+  - direction : Direction
+  + getPosition() : Position
+  + setPosition(p: Position)
+  + getDirection() : Direction
+  + setDirection(d: Direction)
   +startEngine()
   +stopEngine()
   +gas(amount)
   +brake(amount)
-  +move()
   +up()
   +down()
-  +turnLeft()
-  +turnRight()
-  +speedFactor():double (abstract)
+  +speedFactor():
 }
 
-abstract class Ferry extends VehicleTransporter<Car>{
+enum Direction {
+  NORTH
+  SOUTH
+  EAST
+  WEST
 }
 
-abstract class Car extends Vehicle implements Transportable{
+abstract class Ferry {
 }
 
-abstract class VehicleTransporter<T extends Car> extends Vehicle implements Transporter<T>{
+abstract class Car {
+
 }
 
-class Volvo240 extends Car{
-}
-class Saab95 extends Car implements Turboable{
-}
-class Scania<T extends Transportable> extends Vehicle implements Transporter<T>{
-}
-class VolkswagenUnicorn extends VehicleTransporter<Car> implements Rampable{
+abstract class VehicleTransporter<T extends Car> {
 }
 
-class Workshop<T extends Car> implements HasPosition, Loader<T> {
+class Volvo240{
+}
+class Saab95 {
+    + turboOn()
+    + turboOff()
+    + toggleTurbo()
+    + speedFactor()
+}
+class Scania<T extends Transportable> {
+    +lowerBed()
+    +raiseBed()
+}
+class VolkswagenUnicorn {
+}
+
+class Workshop<T extends Car>  {
   -capacity:int
   -stored:List<T>
   -acceptedType:Class<T>
-  -x:double
-  -y:double
-  +tryLoad(car:Car): boolean
-  +accepts(car:Car): boolean
-  +unload(): T
-  +load(item:T): void
+  +hasSpace() : boolean
+  +getAcceptedType() : Class<T>
+
+
+  }
+
+class WallCollisionHandler {
+    -minX : int
+    -minY : int
+    -maxX : int
+    -maxY : int
+    +handle(v : Vehicle)
+    }
+
+class WorkShopCollisionHandler {
+    - distance : double
+    + handle(vehicles : List<Vehicle>, shops : List<WorkShop<? extends Car>>) : List<Vehicle>
 }
 
 class Simulation {
   -vehicles: List<Vehicle>
+  -observers : List<SimulationObserver>
   -wall: WallCollisionHandler
   -workshops: List<Workshop<? extends Car>>
   -workshopHandler: WorkshopCollisionHandler
+  -mapper : RenderItemMapper
 
-  +tick()
+  +tick() : boolean
   +gasAll(amount)
   +brakeAll(amount)
   +startAll()
@@ -131,22 +151,19 @@ class Simulation {
   +turnRightAll()
   +upAll()
   +downAll()
+  +turboOn()
+  +turboOff()
+  +toggleTurbo()
+  +lowerBed()
+  +raiseBed()
+  +unloadCarFromShopRandom() : boolean
 
-  +turboOnAll()
-  +turboOffAll()
-  +raiseBedAll()
-  +lowerBedAll()
-
-  +addWorkshop(ws)
-  +getWorkshops()
-
-  +unloadOneFromAnyWorkshop(): boolean
 }
 abstract class VehicleFactory{
     -registry: Map<VehicleType>, Supplier<Vehicle>
     + createVehicle(type: VehicleType): Vehicle
 }
-' Creates vehicle
+
 
 
 enum VehicleType{
@@ -158,30 +175,25 @@ enum VehicleType{
     }
 
 
-class WorkShopFactory{
-    +createWorkShop(capacity, Class<T> type): WorkShop<>
-    }
-
-
 ' =========================
 ' VIEW
 ' =========================
-class CarView extends JFrame{
+class CarView {
   - initComponents(title) : void
-  - centerOnScreen() : void
-
-  + getDrawPanel() : DrawPanel
-
 }
 
-class DrawPanel extends JPanel{
-
+class DrawPanel {
+   -imageHandler : ImageHandler
+    -items : List<RenderItem>
+    +nTick(items : List<RenderItem>)
+    +setRenderItems(items : List<RenderItem>
 }
 
 
 class ImageHandler{
-  + getImageKey(Obj : object) : String
-  + isFlipped(Obj : object) : boolean
+   -images : Map<String, BufferedImage>
+    +add(imageID : String, imagePath : String)
+    +get(imageID : String) : BufferedImage
   }
 
 
@@ -189,36 +201,90 @@ class ImageHandler{
 ' CONTROLLER
 ' =========================
 class CarController{
-  - simulation : Simulation
-  - input : InputHandler
-  - view : CarView
+    -timer : Timer
+    -simulation : Simulation
+    -input : InputHandler
+    -carView : CarView
+    -factory : VehicleFactory
 
-}
+   +setView(view : CarView)
+   }
 
 class InputHandler{
-  - controller : CarController
-  + bindKeyboard(component: JComponent)
-  + bindButtons(view: CarView)
+    -controller : CarController
+    +setupKeyBindings(component : JComponent)
+    +bindButtons(view : CarView)
 }
 
 '===========================================
-' BEROENDEN
+' GENERALISERING
 '===========================================
-
-'===========================================
-'ASSOCIATIONER
-'===========================================
-
-'===========================================
-'ASSOCIATIONER
-'===========================================
-
-'===========================================
-'ASSOCIATIONER
-'===========================================
+'Är en subklass av
+Vehicle <|-- Car
+Car <|-- Volvo240
+Car <|-- Saab95
+Vehicle <|--VehicleTransporter
+VehicleTransporter <|-- VolkswagenUnicorn
+VehicleTransporter <|-- Ferry
+Vehicle <|-- Scania
+Vehicle --> Direction
 
 
+JPanel <|-- DrawPanel
+JFrame <|-- CarView
 
-Rampable <|-- Scania
+
+
+
+'===========================================
+'REALISERING
+'===========================================
+'En klass implementerar ett interface
+VehicleTransporter ..|> Transporter
+WorkShop ..|> Loader
+Workshop --|> HasPosition
+Saab95 ..|> Turboable
+Scania ..|> Rampable
+VolkswagenUnicorn ..|> Rampable
+Car ..|> Transportable
+Vehicle ..|> Movable
+Transporter ..|> Loader
+Movable ..|> HasPosition
+
+DrawPanel ..|> SimulationObserver
+
+'===========================================
+'KOMPOSITION
+'===========================================
+'En klass har fält som ansvarar av den
+Simulation <-- SimulationObserver
+CarController <-- InputHandler
+CarView <-- DrawPanel
+CarView <-- JPanel
+RenderItemMapper <-- RenderItem
+
+'===========================================
+'USAGE DEPENDANCY
+'===========================================
+' En klass använder eller skapar objekt av en annan klass/interface
+Simulation ..> Turboable
+Simulation ..> Rampable
+Simulation ..> Car
+Simulation ..> WorkShop
+Simulation ..> WallCollisionHandler
+Simulation ..> WorkShopCollisionHandler
+CarController ..> Simulation
+CarController ..> VehicleFactory
+CarController ..> VehicleType
+CarController ..> CarView
+InputHandler ..> CarController
+StandardVehicleFactory ..> Vehicle
+WallCollisionHandler ..> Vehicle
+WorkShopCollisionHandler ..> Vehicle
+WorkShopCollisionHandler ..> WorkShop
+DrawPanel ..> RenderItem
+DrawPanel ..> ImageHandler
+RenderItem ..> Vehicle
+
 
 @enduml

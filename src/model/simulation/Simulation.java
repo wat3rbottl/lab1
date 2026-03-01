@@ -1,9 +1,9 @@
 package model.simulation;
 
 import interfaces.Rampable;
+import interfaces.Turboable;
 import interfaces.SimulationObserver;
 import model.vehicle.Car;
-import model.vehicle.Saab95;
 import model.vehicle.Vehicle;
 import model.workshop.WorkShop;
 import view.RenderItemMapper;
@@ -86,17 +86,17 @@ public class Simulation {
     // instance-of things
     public void turboOn() {
         for (Vehicle v : vehicles)
-            if (v instanceof Saab95 s) s.turboOn();
+            if (v instanceof Turboable t) t.turboOn();
     }
 
     public void turboOff() {
         for (Vehicle v : vehicles)
-            if (v instanceof Saab95 s) s.turboOff();
+            if (v instanceof Turboable t) t.turboOff();
     }
 
     public void toggleTurbo(){
         for (Vehicle v : vehicles){
-            if (v instanceof Saab95 s) s.toggleTurbo();
+            if (v instanceof Turboable t) t.toggleTurbo();
         }
     }
 
