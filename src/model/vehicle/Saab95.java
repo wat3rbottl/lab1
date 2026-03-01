@@ -25,6 +25,7 @@ public class Saab95 extends Car implements Turboable {
         return turboOn;
     }
 
+    @Override
     public void toggleTurbo(){
         turboOn = !turboOn;
     }

@@ -1,4 +1,4 @@
 package view;
 
-public record RenderItem(String imageId, int x, int y, boolean flipX) {
+public record RenderItem(String imageId, int x, int y, boolean flipX, String name, double speed) {
 }

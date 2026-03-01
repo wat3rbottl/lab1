@@ -8,6 +8,7 @@ import model.simulation.WorkShopCollisionHandler;
 import model.vehicle.*;
 import model.workshop.WorkShop;
 import view.CarView;
+import view.SpeedView;
 import view.ImageHandler;
 
 import java.util.ArrayList;
@@ -40,8 +41,12 @@ public class App {
                 new WorkShopCollisionHandler(10));
 
         CarView view = new CarView("CarSim", new ImageHandler());
+        SpeedView speedview = new SpeedView();
 
         sim.addObserver(view.getDrawPanel());
+        sim.addObserver(speedview);
+        view.add(speedview, java.awt.BorderLayout.NORTH);
+
         sim.tick();
 
         CarController controller = new CarController(sim);

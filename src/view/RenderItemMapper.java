@@ -15,7 +15,9 @@ public class RenderItemMapper {
                     v.getClass().getSimpleName(),
                     (int) Math.round(v.getX()),
                     (int) Math.round(v.getY()),
-                    v.getDirection() == Vehicle.Direction.WEST
+                    v.getDirection() == Vehicle.Direction.WEST,
+                    v.getClass().getSimpleName(),
+                    v.getCurrentSpeed()
             ));
         }
 
@@ -23,7 +25,7 @@ public class RenderItemMapper {
             String imageId = ws.getAcceptedType() == Car.class
                     ? "GeneralShop"
                     : ws.getAcceptedType().getSimpleName() + "Shop";
-            items.add(new RenderItem(imageId, (int) Math.round(ws.getX()), (int) Math.round(ws.getY()), false));
+            items.add(new RenderItem(imageId, (int) Math.round(ws.getX()), (int) Math.round(ws.getY()), false, imageId, 0.0));
         }
 
         return items;
