@@ -33,10 +33,6 @@ public abstract class Vehicle implements Movable {
         return direction;
     }
 
-    public String getImageId() {
-        return modelName;
-    }
-
     public void setDirection(Direction direction) {
         this.direction = direction;
     }

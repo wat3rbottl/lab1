@@ -15,7 +15,7 @@ public class WallCollisionHandler {
         this.maxY = maxY;
     }
 
-    public void handle(Vehicle v) {
+     protected void handle(Vehicle v) {
         int x = (int) Math.round(v.getX());
         int y = (int) Math.round(v.getY());
 

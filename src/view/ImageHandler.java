@@ -19,17 +19,16 @@ public class ImageHandler {
         add("GeneralShop",  "/pics/GeneralShop.jpg");
     }
 
-    public void add(String imageID, String imagePath) {
+    private void add(String imageID, String imagePath) {
         try {
             BufferedImage img = ImageIO.read(ImageHandler.class.getResourceAsStream(imagePath));
             images.put(imageID, img);
         } catch (IOException | IllegalArgumentException e) {
             throw new RuntimeException("Could not find image: " + imagePath + " .", e);
-
         }
     }
 
-    public BufferedImage get(String imageID) {
+    BufferedImage get(String imageID) {
         return images.get(imageID);
     }
 }

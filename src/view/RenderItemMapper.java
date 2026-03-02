@@ -27,7 +27,6 @@ public class RenderItemMapper {
                     : ws.getAcceptedType().getSimpleName() + "Shop";
             items.add(new RenderItem(imageId, (int) Math.round(ws.getX()), (int) Math.round(ws.getY()), false, imageId, 0.0));
         }
-
         return items;
     }
 }

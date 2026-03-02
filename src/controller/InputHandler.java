@@ -13,7 +13,7 @@ public class InputHandler {
     }
 
     // Keyboard set up
-    public void setupKeyBindings(JComponent component) {
+    void setupKeyBindings(JComponent component) {
 
         InputMap im = component.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap am = component.getActionMap();
@@ -57,7 +57,7 @@ public class InputHandler {
     }
 
     // Binding clickable buttons
-    public void bindButtons(CarView view) {
+     void bindButtons(CarView view) {
 
         view.getGasButton().addActionListener(e -> cc.gas(view.getGasAmount()));
         view.getBrakeButton().addActionListener(e -> cc.brake(view.getBrakeAmount()));

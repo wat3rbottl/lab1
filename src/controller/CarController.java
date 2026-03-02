@@ -96,7 +96,7 @@ public class CarController {
         simulation.raiseBed();
     }
 
-    public void unloadCarFromShopRandom() {
+    void unloadCarFromShopRandom() {
         simulation.unloadCarFromShopRandom();
     }
 
