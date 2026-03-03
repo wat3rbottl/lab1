@@ -78,14 +78,6 @@ public class CarController {
         simulation.downAll();
     }
 
-//    void turboOn() {
-//        simulation.turboOn();
-//    }
-//
-//    void turboOff() {
-//        simulation.turboOff();
-//    }
-
     void toggleTurbo(){simulation.toggleTurbo();}
 
     void lowerBed() {

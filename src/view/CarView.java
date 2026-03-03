@@ -155,10 +155,6 @@ public class CarView extends JFrame {
         return turboOnButton;
     }
 
-   // public JButton getTurboOffButton() {
-   //      return turboOffButton;
-   //  }
-
     public JButton getLiftBedButton() {
         return liftBedButton;
     }

@@ -13,7 +13,7 @@ public class SpeedView extends JPanel implements SimulationObserver {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         Color Purple = new Color(128, 0, 128);
         setBackground(Purple);
-        
+
         add(speedLabel);
         speedLabel.setForeground(Color.pink);
         this.setOpaque(true);
