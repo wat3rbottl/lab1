@@ -13,7 +13,7 @@ public class DrawPanel extends JPanel implements SimulationObserver {
     private List<RenderItem> items = List.of();
 
     //Initializes the panel
-    public DrawPanel(int width, int height, ImageHandler imageHandler) {
+    DrawPanel(int width, int height, ImageHandler imageHandler) {
         this.imageHandler = imageHandler;
 
         setDoubleBuffered(true);
@@ -25,10 +25,6 @@ public class DrawPanel extends JPanel implements SimulationObserver {
     public void onTick(List<RenderItem> items) {
         this.items = items;
         repaint();
-    }
-
-    public void setRenderItems(List<RenderItem> items) {
-        this.items = items;
     }
 
     @Override

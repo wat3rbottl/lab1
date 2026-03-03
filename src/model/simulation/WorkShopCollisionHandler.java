@@ -15,7 +15,7 @@ public class WorkShopCollisionHandler {
         this.distance = distance;
     }
 
-    public List<Vehicle> handle(List<Vehicle> vehicles, List<WorkShop<? extends Car>> shops) {
+    protected List<Vehicle> handle(List<Vehicle> vehicles, List<WorkShop<? extends Car>> shops) {
         List<Vehicle> toRemove = new ArrayList<>();
 
         for (Vehicle v : vehicles) {

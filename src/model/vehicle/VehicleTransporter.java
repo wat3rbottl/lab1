@@ -30,7 +30,7 @@ public abstract class VehicleTransporter<T extends Car> extends Vehicle implemen
     @Override
     public abstract T unload();
 
-    protected final void syncPositions() {
+    private void syncPositions() {
         for (T item : getLoadedItems()) {
             if (item != null) {
                 item.setPosition(getX(), getY());
